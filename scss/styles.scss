@@ -1,8 +1,147 @@
+$mainColor: #00796b;
+$textColor: #000929;
+$max-width: 1024px;
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
 html {
   font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: 16px;
+  position: relative;
+}
+
+.nav-logo img {
+  width: 180px;
+}
+
+.nav-desktop-menu {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+    margin: 0;
+    li {
+      list-style: none;
+    }
+
+    a {
+      color: $textColor;
+      text-decoration: none;
+
+      &:hover {
+        color: $mainColor;
+        transition: 0.2s ease-in-out;
+      }
+    }
+  }
+
+  .nav-auth {
+    display: flex;
+    gap: 16px;
+
+    a {
+      text-decoration: none;
+    }
+
+    &-login {
+      border: 2px solid #e0def7;
+      border-radius: 8px;
+      padding: 10px 20px;
+      color: $textColor;
+    }
+
+    &-register {
+      border: 2px solid $mainColor;
+      border-radius: 8px;
+      padding: 10px 20px;
+      background: $mainColor;
+      color: white;
+    }
+  }
+}
+
+.nav-toggle {
+  display: none;
+  font-size: 28px;
+  cursor: pointer;
+  z-index: 200;
+}
+
+.nav-mobile-menu {
+  display: none;
+  flex-direction: column;
+  gap: 20px;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  padding: 24px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  z-index: 150;
+  transition: all 0.3s ease;
+
+  &.active {
+    display: flex;
+  }
+
+  .nav-links,
+  .nav-auth {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  a {
+    color: $textColor;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 8px 0;
+
+    &:hover {
+      color: $mainColor;
+    }
+  }
+
+  .nav-auth-login {
+    border: 2px solid #e0def7;
+    border-radius: 8px;
+    padding: 10px 20px;
+    text-align: center;
+  }
+
+  .nav-auth-register {
+    border: 2px solid $mainColor;
+    border-radius: 8px;
+    padding: 10px 20px;
+    background: $mainColor;
+    color: white;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-desktop-menu {
+    display: none;
+  }
+
+  .nav-toggle {
+    display: block;
+  }
 }

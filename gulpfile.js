@@ -15,8 +15,8 @@ const paths = {
     src: "scss/**/*.scss",
     dest: "css",
   },
-  html: {
-    src: "*.html",
+  php: {
+    src: "**/*.php", // Watch all PHP files, including index.php and includes
   },
 };
 
@@ -33,17 +33,17 @@ function compileScss() {
     .pipe(bs.stream()); // Inject changes without full reload
 }
 
-// Live Server
+// Live Server with PHP support
 function serve() {
   bs.init({
-    server: {
-      baseDir: "./", // Serve from root
-    },
+    proxy: "localhost", // assumes you're running PHP via something like XAMPP, WAMP, MAMP, or `php -S`
     notify: false,
+    open: true,
+    port: 3000,
   });
 
   gulp.watch(paths.scss.src, compileScss);
-  gulp.watch(paths.html.src).on("change", bs.reload);
+  gulp.watch(paths.php.src).on("change", bs.reload);
 }
 
 // Export tasks
