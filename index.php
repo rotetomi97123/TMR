@@ -24,14 +24,12 @@
   </head>
   <body>
     <?php include 'includes/header.php'; ?>
+    <div class="hero_wrapper">
+      <!-- hero -->
+      <?php include 'includes/banner_form.php'; ?>
 
-    <div class="container mt-5">
-      <h1 class="text-primary">Hello!</h1>
-      <p>This is a simple Bootstrap example.</p>
-      <button class="btn btn-success">Click Me</button>
-      <h1>Available Listings</h1>
-      <div id="listings"></div>
     </div>
+    <!-- hero -->
     <script src="js/main.js"></script>
   </body>
 </html>

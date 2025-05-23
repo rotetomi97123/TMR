@@ -18,8 +18,9 @@ html {
   align-items: center;
   max-width: $max-width;
   margin: 0 auto;
-  padding: 16px;
   position: relative;
+  padding: 4px 16px;
+  background: white;
 }
 
 .nav-logo img {
@@ -50,28 +51,36 @@ html {
       }
     }
   }
+}
+.nav-auth {
+  display: flex;
 
-  .nav-auth {
-    display: flex;
-    gap: 16px;
+  a {
+    text-decoration: none;
+  }
 
-    a {
-      text-decoration: none;
+  &-login {
+    padding: 10px 30px;
+    color: $mainColor;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    border: 1px solid $mainColor;
+    &:hover {
+      border: 1px solid $textColor;
     }
+  }
 
-    &-login {
-      border: 2px solid #e0def7;
-      border-radius: 8px;
-      padding: 10px 20px;
-      color: $textColor;
-    }
+  &-register {
+    padding: 10px 20px;
+    background: $mainColor;
+    color: white;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    border: 1px solid transparent;
 
-    &-register {
-      border: 2px solid $mainColor;
-      border-radius: 8px;
-      padding: 10px 20px;
-      background: $mainColor;
-      color: white;
+    &:hover {
+      color: black;
+      background: #e0def7;
     }
   }
 }
@@ -101,8 +110,8 @@ html {
     display: flex;
   }
 
-  .nav-links,
-  .nav-auth {
+  .nav-links-mobile,
+  .nav-auth-mobile {
     display: flex;
     flex-direction: column;
     gap: 14px;
@@ -137,11 +146,105 @@ html {
 }
 
 @media (max-width: 768px) {
-  .nav-desktop-menu {
-    display: none;
+  .nav-links,
+  .nav-auth {
+    display: none !important;
   }
-
   .nav-toggle {
     display: block;
+  }
+}
+
+// hero
+.banner_wrapper {
+  height: 100%;
+}
+.hero_wrapper {
+  width: 100%;
+  height: 89vh;
+  // background: linear-gradient(135deg, #009688, #00796b, #004d40);
+  background: #e5e5e5;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: url(../assets/banner.png);
+    position: absolute;
+    right: -500px;
+    bottom: -100px;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .banner_content {
+    max-width: $max-width;
+    margin: 0 auto;
+    height: 100%;
+    &_flex {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    h2,
+    p {
+      color: $textColor;
+    }
+  }
+}
+
+#property-search-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+  max-width: 400px;
+  color: $textColor;
+  input,
+  select,
+  button {
+    padding: 10px 12px;
+    font-size: 15px;
+    border: 1px solid $mainColor;
+    border-radius: 6px;
+    transition: border-color 0.3s ease;
+    color: $textColor;
+    background-color: white;
+  }
+
+  input::placeholder,
+  select {
+    color: $textColor;
+  }
+
+  input:focus,
+  select:focus {
+    outline: none;
+    border-color: $mainColor;
+  }
+
+  select {
+    appearance: none;
+    cursor: pointer;
+  }
+  .form-row {
+    display: flex;
+    gap: 8px;
+    input {
+      width: 50%;
+    }
+  }
+
+  button {
+    background-color: $mainColor;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 0;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: $mainColor;
+    }
   }
 }
