@@ -20,9 +20,9 @@
 
   <div class="nav-mobile-menu" id="mobile-menu">
     <ul class="nav-links-mobile">
-      <li><a href="index.php">Rent</a></li>
-      <li><a href="index.php">Buy</a></li>
-      <li><a href="index.php">Sell</a></li>
+      <li><a href="index.php">Rent <i class="bi bi-chevron-right"></i></a></li>
+      <li><a href="index.php">Buy <i class="bi bi-chevron-right"></i></a></li>
+      <li><a href="index.php">Sell <i class="bi bi-chevron-right"></i></a></li>
     </ul>
     <div class="nav-auth-mobile">
       <a href="#" class="nav-auth-login">Login</a>

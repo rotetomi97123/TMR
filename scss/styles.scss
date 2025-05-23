@@ -54,6 +54,8 @@ html {
 }
 .nav-auth {
   display: flex;
+  gap: 10px;
+  
 
   a {
     text-decoration: none;
@@ -65,6 +67,7 @@ html {
     transition: all 0.3s ease;
     font-weight: 600;
     border: 1px solid $mainColor;
+    border-radius: 8px;
     &:hover {
       border: 1px solid $textColor;
     }
@@ -77,6 +80,7 @@ html {
     transition: all 0.3s ease;
     font-weight: 600;
     border: 1px solid transparent;
+    border-radius: 8px;
 
     &:hover {
       color: black;
@@ -95,7 +99,6 @@ html {
 .nav-mobile-menu {
   display: none;
   flex-direction: column;
-  gap: 20px;
   position: absolute;
   top: 100%;
   left: 0;
@@ -110,7 +113,13 @@ html {
     display: flex;
   }
 
-  .nav-links-mobile,
+  .nav-links-mobile{
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    list-style-type: none;
+    padding: 0 0 0 20px;
+  }
   .nav-auth-mobile {
     display: flex;
     flex-direction: column;
@@ -118,6 +127,8 @@ html {
   }
 
   a {
+    display: flex;
+    justify-content: space-between;
     color: $textColor;
     text-decoration: none;
     font-size: 18px;
