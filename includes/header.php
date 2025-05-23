@@ -15,7 +15,7 @@
   </div>
 
   <div class="nav-toggle" id="menu-toggle">
-    <i class="bi bi-list" id="menu-icon" style="color: white;"></i>
+    <i class="bi bi-list" id="menu-icon" ></i>
   </div>
 
   <div class="nav-mobile-menu" id="mobile-menu">
