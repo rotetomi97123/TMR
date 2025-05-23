@@ -12,8 +12,9 @@ const bs = browserSync.create();
 // File paths
 const paths = {
   scss: {
-    src: "scss/**/*.scss",
+    entry: "scss/styles.scss",
     dest: "css",
+    watch: "scss/**/*.scss"
   },
   php: {
     src: "**/*.php", // Watch all PHP files, including index.php and includes
@@ -23,7 +24,7 @@ const paths = {
 // Compile SCSS
 function compileScss() {
   return gulp
-    .src(paths.scss.src)
+    .src(paths.scss.entry)
     .pipe(sourcemaps.init())
     .pipe(sass().on("error", sass.logError))
     .pipe(autoprefixer())
@@ -42,7 +43,7 @@ function serve() {
     port: 3000,
   });
 
-  gulp.watch(paths.scss.src, compileScss);
+  gulp.watch(paths.scss.watch, compileScss);
   gulp.watch(paths.php.src).on("change", bs.reload);
 }
 

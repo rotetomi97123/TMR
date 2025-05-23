@@ -31,10 +31,8 @@
       <?php include 'includes/banner_form.php'; ?>
 
     </div>
-    <div id="listings">
-
-    </div>
-    
+    <!-- <div id="listings"></div> -->
+    <?php include 'includes/newhome.php'; ?>
     <script src="js/main.js"></script>
   </body>
 </html>
