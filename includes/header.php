@@ -1,7 +1,7 @@
 <nav class="navbar">
   <div class="nav-desktop-menu">
     <div class="nav-logo">
-      <img src="./assets/StanoviSrbijeLogo.png" alt="logo">
+      <img src="/project/assets/StanoviSrbijeLogo.png" alt="logo">
     </div>
     <ul class="nav-links">
       <li><a href="index.php">Rent</a></li>

@@ -20,28 +20,104 @@ window.addEventListener("resize", () => {
     menuIcon.classList.replace("bi-x", "bi-list");
   }
 });
-document.addEventListener("DOMContentLoaded", () => {
-  fetch("api/listing.php")
-    .then((res) => res.json())
-    .then((data) => {
-      const container = document.getElementById("listings");
-      if (data.success) {
-        data.data.forEach((listing) => {
-          const div = document.createElement("div");
-          div.innerHTML = `
-            <h2>${listing.title}</h2>
-            <p>${listing.description}</p>
-            <p><strong>Price:</strong> ${listing.rental_price} €</p>
-            <hr>
-          `;
-          container.appendChild(div);
-        });
-      } else {
-        container.textContent = "Error loading listings.";
+
+document.getElementById("searchForm").addEventListener("submit", function (e) {
+  e.preventDefault(); // Prevent form from actually submitting
+
+  const location = document.getElementById("location").value.trim();
+
+  if (location.length < 2) {
+    console.warn("Please enter at least 2 characters.");
+    return;
+  }
+  window.location.href = `pages/results.php?location=${encodeURIComponent(
+    location
+  )}`;
+});
+
+window.addEventListener("DOMContentLoaded", () => {
+  const locationInput = document.getElementById("location");
+
+  if (!locationInput) return;
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+
+        try {
+          const response = await fetch("api/search.php", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ lat, lon }),
+          });
+
+          const result = await response.json();
+          locationInput.value = result.city || "Not found";
+        } catch (err) {
+          console.error(err);
+          locationInput.value = "Error fetching city";
+        }
+      },
+      () => {
+        locationInput.value = "Location denied";
       }
-    })
-    .catch((err) => {
-      console.error("Fetch error:", err);
-      document.getElementById("listings").textContent = "Network error.";
+    );
+  } else {
+    locationInput.value = "Geolocation not supported";
+  }
+});
+const locationInput = document.getElementById("location");
+const suggestionsBox = document.getElementById("suggestions");
+
+locationInput.addEventListener("input", async () => {
+  const query = locationInput.value.trim();
+
+  // Clear old suggestions
+  suggestionsBox.innerHTML = "";
+
+  if (query.length < 2) return; // only search if 2+ chars
+
+  try {
+    const response = await fetch(
+      `api/autocomplete.php?q=${encodeURIComponent(query)}`
+    );
+    const data = await response.json();
+
+    // data should be an array of city names
+    if (data.length === 0) return;
+
+    const list = document.createElement("ul");
+    list.style.position = "absolute";
+    list.style.backgroundColor = "white";
+    list.style.border = "1px solid #ccc";
+    list.style.padding = "0";
+    list.style.margin = "0";
+    list.style.width = locationInput.offsetWidth + "px";
+    list.style.listStyle = "none";
+    list.style.maxHeight = "150px";
+    list.style.overflowY = "auto";
+    list.style.zIndex = "9999";
+
+    data.forEach((city) => {
+      const item = document.createElement("li");
+      item.textContent = city;
+      item.style.padding = "5px";
+      item.style.cursor = "pointer";
+
+      item.addEventListener("click", () => {
+        locationInput.value = city;
+        suggestionsBox.innerHTML = "";
+      });
+
+      list.appendChild(item);
     });
+
+    suggestionsBox.appendChild(list);
+  } catch (err) {
+    console.error("Autocomplete error:", err);
+  }
 });

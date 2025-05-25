@@ -23,7 +23,6 @@ html {
   position: relative;
   padding: 4px 16px;
   background: white;
-  height: 10vh;
 }
 
 .nav-logo img {
@@ -58,7 +57,6 @@ html {
 .nav-auth {
   display: flex;
   gap: 10px;
-  
 
   a {
     text-decoration: none;
@@ -116,7 +114,7 @@ html {
     display: flex;
   }
 
-  .nav-links-mobile{
+  .nav-links-mobile {
     display: flex;
     flex-direction: column;
     gap: 14px;
@@ -175,90 +173,131 @@ html {
 }
 .hero_wrapper {
   width: 100%;
-  height: 90vh;
+  height: 87vh;
   // background: linear-gradient(135deg, #009688, #00796b, #004d40);
   background: #e5e5e5;
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: url(../assets/banner.png);
-    position: absolute;
-    right: -500px;
-    bottom: -100px;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-  .banner_content {
+  &_content {
     max-width: $max-width;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     height: 100%;
-    &_flex {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+    h1 {
+      max-width: 544px;
+      font-weight: 700;
     }
-    h2,
+    p {
+      max-width: 450px;
+      font-size: 18px;
+      font-weight: 400;
+      margin: 8px 0 0 0;
+    }
+    h1,
     p {
       color: $textColor;
     }
+    span {
+      color: $mainColor;
+      font-weight: 700;
+      font-size: 32px;
+    }
+    &Flex {
+      display: flex;
+      gap: 80px;
+      margin: 16px 0 0 0;
+    }
   }
 }
+.searchForm input[type="radio"] {
+  display: none;
+}
 
-#property-search-form {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 8px;
-  max-width: 400px;
-  color: $textColor;
-  input,
-  select,
-  button {
-    padding: 10px 12px;
-    font-size: 15px;
-    border: 1px solid $mainColor;
-    border-radius: 6px;
-    transition: border-color 0.3s ease;
-    color: $textColor;
-    background-color: white;
-  }
+.radio-label {
+  cursor: pointer;
+  position: relative;
+  padding-bottom: 4px;
+  font-size: 18px;
+  margin: 32px 0 16px 0;
+}
 
-  input::placeholder,
-  select {
-    color: $textColor;
-  }
+.radio-label .radio-text {
+  display: inline-block;
+  padding: 5px 32px;
+  transition: border-bottom 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
 
-  input:focus,
-  select:focus {
-    outline: none;
-    border-color: $mainColor;
+.radio-label input[type="radio"]:checked + .radio-text {
+  border-bottom: 2px solid #009688;
+  font-weight: bold;
+  color: $mainColor;
+}
+.form-group-flex {
+  display: flex;
+  position: relative;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  padding: 25px 32px;
+  &:first-of-type {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
   }
+}
+.form-group-submit {
+  padding: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+.form-group label {
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #333;
+}
 
-  select {
-    appearance: none;
-    cursor: pointer;
-  }
-  .form-row {
-    display: flex;
-    gap: 8px;
-    input {
-      width: 50%;
-    }
-  }
+.form-input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border-color 0.2s ease;
+  max-width: 150px;
+}
 
-  button {
-    background-color: $mainColor;
-    color: white;
-    font-weight: 700;
-    cursor: pointer;
-    border: none;
-    border-radius: 6px;
-    padding: 12px 0;
-    transition: background-color 0.3s ease;
+.form-input:focus {
+  border-color: #009688;
+  outline: none;
+}
 
-    &:hover {
-      background-color: $mainColor;
-    }
-  }
+.form-submit {
+  padding: 12px 24px;
+  background-color: #009688;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.form-submit:hover {
+  background-color: #00796b;
+}
+
+.suggestions {
+  position: absolute;
+  z-index: 10;
+  left: 30px;
+  bottom: 20px;
+}
+
+#suggestions ul li:hover {
+  background-color: #f0f0f0;
 }
