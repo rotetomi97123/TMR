@@ -120,3 +120,133 @@ window.addEventListener("DOMContentLoaded", () => {
       console.error("Fetch error:", error);
     });
 });
+// Property Showcase Functionality
+let currentProperty = 0;
+let autoRotateInterval;
+
+function initPropertyShowcase() {
+  const properties = document.querySelectorAll(".property_card");
+  const dots = document.querySelectorAll(".showcase_dots .dot");
+
+  if (properties.length === 0) return;
+
+  function showProperty(index) {
+    // Remove all active classes
+    properties.forEach((card) => {
+      card.classList.remove("active", "next");
+    });
+
+    dots.forEach((dot) => {
+      dot.classList.remove("active");
+    });
+
+    // Set current property as active
+    if (properties[index]) {
+      properties[index].classList.add("active");
+    }
+    if (dots[index]) {
+      dots[index].classList.add("active");
+    }
+
+    // Set next property (if exists)
+    const nextIndex = (index + 1) % properties.length;
+    if (properties[nextIndex]) {
+      properties[nextIndex].classList.add("next");
+    }
+
+    currentProperty = index;
+  }
+
+  // Auto-rotate properties every 4 seconds
+  function autoRotate() {
+    const nextIndex = (currentProperty + 1) % properties.length;
+    showProperty(nextIndex);
+  }
+
+  // Make showProperty globally accessible for onclick
+  window.showProperty = showProperty;
+
+  // Start auto-rotation
+  autoRotateInterval = setInterval(autoRotate, 4000);
+
+  // Pause auto-rotation when user hovers over showcase
+  const showcase = document.querySelector(".property_showcase");
+  if (showcase) {
+    showcase.addEventListener("mouseenter", () => {
+      clearInterval(autoRotateInterval);
+    });
+
+    showcase.addEventListener("mouseleave", () => {
+      autoRotateInterval = setInterval(autoRotate, 4000);
+    });
+  }
+
+  // Initialize first property
+  showProperty(0);
+}
+
+fetch("/project/api/hero_slider.php", {
+  method: "POST",
+})
+  .then((response) => response.json())
+  .then((data) => {
+    if (data.success && data.data.length > 0) {
+      const showcase = document.querySelector(".property_showcase");
+      const dots = document.querySelector(".showcase_dots");
+
+      data.data.forEach((listing, index) => {
+        const priceEUR = Math.round(parseFloat(listing.rental_price) / 117);
+        const imageUrl =
+          listing.image_url || "https://via.placeholder.com/400x250";
+        const badgeText =
+          index === 0 ? "Featured" : index === 1 ? "New" : "Popular";
+
+        const card = document.createElement("div");
+        card.className = "property_card";
+        card.innerHTML = `
+          <div class="property_image" style="background-image: url('${imageUrl}');">
+            <div class="property_badge">${badgeText}</div>
+          </div>
+          <div class="property_info">
+            <p class="property_price">
+              <span>€${priceEUR}</span>
+              /month
+            </p>
+            <h4 class="property_title">${
+              listing.title || "Untitled Property"
+            }</h4>
+            <p class="property_location">${listing.city_area}, ${
+          listing.city || ""
+        }</p>
+            <div class="property_features">
+              <p>
+                <img src="/project/assets/bed.svg" alt="bed icon" class="icon" />
+                ${listing.beds} beds
+              </p>
+              <p>
+                <img src="/project/assets/bath.svg" alt="bathroom icon" class="icon" />
+                ${listing.bathroom} bathrooms
+              </p>
+              <p>
+                <i class="bi bi-aspect-ratio"></i> ${listing.square_meters} m²
+              </p>
+            </div>
+          </div>
+        `;
+
+        showcase.appendChild(card);
+
+        const dot = document.createElement("div");
+        dot.className = "dot";
+        dots.appendChild(dot);
+      });
+
+      // 🔁 Once everything is loaded, run your existing logic
+      initPropertyShowcase();
+    } else {
+      console.error("No listings found or error:", data.error);
+    }
+  })
+  .catch((error) => {
+    console.error("Fetch error:", error);
+  });

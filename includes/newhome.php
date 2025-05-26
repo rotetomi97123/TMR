@@ -1,4 +1,4 @@
-<div class="newhome">
+<!-- <div class="newhome">
     <div class="newhome-left">
         <div class="newhome-left-title">
             <h2>The new way to find your new home</h2>
@@ -27,4 +27,4 @@
     <div class="newhome-right">
         <img src="./assets/vectorhouse.png" alt="vectorhouse">
     </div>
-</div>
+</div> -->

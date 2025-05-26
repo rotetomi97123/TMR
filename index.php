@@ -23,12 +23,18 @@
     <link rel="icon" href="./assets/favicon.ico" type="image/x-icon" />
   </head>
   <body>
-    
     <?php include 'includes/header.php'; ?>
+    
+  <div class="hero_bg">
     <div class="hero_wrapper">
-      <?php include 'includes/banner_form.php'; ?>
-      <div id="map"></div>
+    <?php include 'includes/banner_form.php'; ?>
+      <div class="featured_properties">
+        <div class="property_showcase"></div>
+        <div class="showcase_dots"></div>
+      </div>
     </div>
+    </div>
+
     <div class="result"></div>
     <div id="listings"></div>
 
