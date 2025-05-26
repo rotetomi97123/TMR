@@ -20,14 +20,46 @@
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
       rel="stylesheet"
     />
+ 
     <link rel="icon" href="../assets/favicon.ico" type="image/x-icon" />
   </head>
   <body>
     <?php include '../includes/header.php'; ?>
+      <div class="result_bg">
+        <div class="result_wrapper">
+          <form id="searchForm" class="searchForm">
+            <div class="radio_wrapper"> 
+              <label class="radio-label">
+                <input type="radio" name="option" value="rent" checked  />
+                <div class="radio-text">Rent</div>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="option" value="buy" />
+                <div class="radio-text">Buy</div>
+              </label>     
+            </div>
+            <div class="form-group-flex">
+              <div class="form-group">
+                <label for="location">Location</label>
+                <select id="location" class="form_input">
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="date">When</label>
+                <input type="date" id="date" class="form-input" />
+              </div>
+              <div class="form-group-submit">  
+                <input type="submit" value="Browse properties" class="form-submit" />
+              </div>
 
-    <h1>Search Results</h1>
-    <div id="results">Loading...</div>
-    <a href="../index.php">Go back</a>
+            </div>
+          </form>
+        </div>
+        <div id="results">Loading...</div>
+      </div>
+
     <script src="../js/result.js"></script>
+
   </body>
-</html>
+  </html>

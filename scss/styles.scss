@@ -176,6 +176,7 @@ html {
   height: 87vh;
   // background: linear-gradient(135deg, #009688, #00796b, #004d40);
   background: #e5e5e5;
+  position: relative;
   &_content {
     max-width: $max-width;
     margin: 0 auto;
@@ -191,7 +192,7 @@ html {
       max-width: 450px;
       font-size: 18px;
       font-weight: 400;
-      margin: 8px 0 0 0;
+      margin: 0;
     }
     h1,
     p {
@@ -204,8 +205,14 @@ html {
     }
     &Flex {
       display: flex;
-      gap: 80px;
       margin: 16px 0 0 0;
+      div {
+        &:first-of-type {
+          border-right: 3px solid #d9d9d9;
+          padding: 0 40px 0 0;
+          margin: 0 40px 0 0;
+        }
+      }
     }
   }
 }
@@ -216,18 +223,28 @@ html {
 .radio-label {
   cursor: pointer;
   position: relative;
-  padding-bottom: 4px;
   font-size: 18px;
-  margin: 32px 0 16px 0;
+  margin: 32px 0 0 0;
+  background: white;
+  &:first-of-type {
+    border-top-left-radius: 8px;
+  }
+  &:last-of-type {
+    border-top-right-radius: 8px;
+  }
 }
-
+.radio_wrapper {
+  display: flex;
+}
 .radio-label .radio-text {
-  display: inline-block;
-  padding: 5px 32px;
+  padding: 15px 32px;
   transition: border-bottom 0.2s ease;
-  border-bottom: 2px solid transparent;
 }
-
+.radio-label input[type="radio"]:not(checked) + .radio-text {
+  border-bottom: 2px solid #e5e5e5;
+  font-weight: 400;
+  color: $textColor;
+}
 .radio-label input[type="radio"]:checked + .radio-text {
   border-bottom: 2px solid #009688;
   font-weight: bold;
@@ -241,9 +258,8 @@ html {
   display: flex;
   flex-direction: column;
   background: white;
-  padding: 25px 32px;
+  padding: 25px 16px 25px 32px;
   &:first-of-type {
-    border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
   }
 }
@@ -255,6 +271,7 @@ html {
   background: white;
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
+  z-index: 100;
 }
 .form-group label {
   margin-bottom: 5px;
@@ -262,7 +279,8 @@ html {
   color: #333;
 }
 
-.form-input {
+.form-input,
+select {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -271,7 +289,8 @@ html {
   max-width: 150px;
 }
 
-.form-input:focus {
+.form-input,
+select:focus {
   border-color: #009688;
   outline: none;
 }
@@ -291,13 +310,56 @@ html {
   background-color: #00796b;
 }
 
-.suggestions {
-  position: absolute;
-  z-index: 10;
-  left: 30px;
-  bottom: 20px;
+#results {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); // responsive
+  gap: 20px; // spacing between items
+  padding: 20px;
+  max-width: $max-width;
+  margin: 0 auto;
 }
-
-#suggestions ul li:hover {
-  background-color: #f0f0f0;
+.listing {
+  img {
+    width: 100%;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+  }
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  &_content {
+    padding: 16px;
+    span {
+      font-weight: 700;
+      color: $mainColor;
+      font-size: 24px;
+    }
+    &_price {
+      font-weight: 200;
+    }
+    &_properties {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      p {
+        margin: 0;
+      }
+      img {
+        width: 18px !important;
+      }
+      i {
+        color: $mainColor;
+      }
+    }
+  }
+}
+.result_bg {
+  background: #e5e5e5;
+  height: 100%;
+}
+.result_wrapper {
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: 20px;
 }

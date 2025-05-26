@@ -36,88 +36,87 @@ document.getElementById("searchForm").addEventListener("submit", function (e) {
 });
 
 window.addEventListener("DOMContentLoaded", () => {
-  const locationInput = document.getElementById("location");
+  fetch("/project/api/get_cities.php")
+    .then((res) => res.json())
+    .then((cities) => {
+      const select = document.getElementById("location");
 
-  if (!locationInput) return;
-
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const lat = position.coords.latitude;
-        const lon = position.coords.longitude;
-
-        try {
-          const response = await fetch("api/search.php", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ lat, lon }),
-          });
-
-          const result = await response.json();
-          locationInput.value = result.city || "Not found";
-        } catch (err) {
-          console.error(err);
-          locationInput.value = "Error fetching city";
-        }
-      },
-      () => {
-        locationInput.value = "Location denied";
-      }
-    );
-  } else {
-    locationInput.value = "Geolocation not supported";
-  }
-});
-const locationInput = document.getElementById("location");
-const suggestionsBox = document.getElementById("suggestions");
-
-locationInput.addEventListener("input", async () => {
-  const query = locationInput.value.trim();
-
-  // Clear old suggestions
-  suggestionsBox.innerHTML = "";
-
-  if (query.length < 2) return; // only search if 2+ chars
-
-  try {
-    const response = await fetch(
-      `api/autocomplete.php?q=${encodeURIComponent(query)}`
-    );
-    const data = await response.json();
-
-    // data should be an array of city names
-    if (data.length === 0) return;
-
-    const list = document.createElement("ul");
-    list.style.position = "absolute";
-    list.style.backgroundColor = "white";
-    list.style.border = "1px solid #ccc";
-    list.style.padding = "0";
-    list.style.margin = "0";
-    list.style.width = locationInput.offsetWidth + "px";
-    list.style.listStyle = "none";
-    list.style.maxHeight = "150px";
-    list.style.overflowY = "auto";
-    list.style.zIndex = "9999";
-
-    data.forEach((city) => {
-      const item = document.createElement("li");
-      item.textContent = city;
-      item.style.padding = "5px";
-      item.style.cursor = "pointer";
-
-      item.addEventListener("click", () => {
-        locationInput.value = city;
-        suggestionsBox.innerHTML = "";
+      cities.forEach((city) => {
+        const option = document.createElement("option");
+        option.value = city;
+        option.textContent = city;
+        select.appendChild(option);
       });
-
-      list.appendChild(item);
     });
+});
 
-    suggestionsBox.appendChild(list);
-  } catch (err) {
-    console.error("Autocomplete error:", err);
-  }
+window.addEventListener("DOMContentLoaded", () => {
+  fetch("/project/api/hero_listing.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ location: "Beograd" }),
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("Network response not ok");
+      return res.json();
+    })
+    .then((response) => {
+      if (response.success) {
+        const listings = response.data;
+
+        // Find the container div where you want to place listings
+        const container = document.getElementById("listingsContainer");
+        if (!container) {
+          console.error("Container div with id 'listingsContainer' not found");
+          return;
+        }
+
+        // Clear previous content
+        container.innerHTML = "";
+
+        // Create divs with all data for each listing
+        listings.forEach((listing) => {
+          const div = document.createElement("div");
+          div.classList.add("listing");
+
+          div.innerHTML = `
+             <div class="listing2">
+                  <img src=${
+                    listing.image_url
+                  }  alt="property_image" class="hero_image"/>
+                  <div class="listing_content">
+                   <p class="listing_content_price">
+                      <span>
+                        ${Math.round(parseFloat(listing.rental_price) / 117)}€
+                      </span>
+                      /month
+                    </p>
+                    <h4>${listing.city_area}</h4>
+                    <p>${listing.address}</p>
+                    <div class="listing_content_properties">
+                        <p>
+                          <img src="/project/assets/bed.svg" alt="bed icon" class="icon" />
+                          ${listing.beds} beds
+                        </p>
+                        <p>
+                          <img src="/project/assets/bath.svg" alt="bathroom icon" class="icon" />
+                          ${listing.bathroom} bathrooms
+                        </p>
+                      <p><i class="bi bi-aspect-ratio"></i> ${
+                        listing.square_meters
+                      } m²</p>
+                    </div>
+                  </div>
+                </div>
+          `;
+
+          container.appendChild(div);
+        });
+      } else {
+        console.error("API error:", response.error);
+      }
+    })
+    .catch((error) => {
+      console.error("Fetch error:", error);
+    });
 });
