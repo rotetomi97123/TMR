@@ -33,11 +33,7 @@
         <div class="showcase_dots"></div>
       </div>
     </div>
-    </div>
-
-    <div class="result"></div>
-    <div id="listings"></div>
-
+  </div>
     <?php include 'includes/newhome.php'; ?>
     <script src="js/main.js"></script>
   </body>

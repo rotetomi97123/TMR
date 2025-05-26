@@ -25,14 +25,17 @@ document.getElementById("searchForm").addEventListener("submit", function (e) {
   e.preventDefault(); // Prevent form from actually submitting
 
   const location = document.getElementById("location").value.trim();
+  const type = document.getElementById("type").value; // Get selected type
 
   if (location.length < 2) {
     console.warn("Please enter at least 2 characters.");
     return;
   }
+
+  // Redirect with both location and type as query parameters
   window.location.href = `pages/results.php?location=${encodeURIComponent(
     location
-  )}`;
+  )}&type=${encodeURIComponent(type)}`;
 });
 
 window.addEventListener("DOMContentLoaded", () => {

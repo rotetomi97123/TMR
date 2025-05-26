@@ -46,8 +46,11 @@
               </div>
               
               <div class="form-group">
-                <label for="date">When</label>
-                <input type="date" id="date" class="form-input" />
+                <label for="type">Type</label>
+                <Select id="type" class="form_input">
+                  <option value="apartment">Apartman</option>
+                  <option value="house">House</option>
+                </Select>
               </div>
               <div class="form-group-submit">  
                 <input type="submit" value="Browse properties" class="form-submit" />

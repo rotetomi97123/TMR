@@ -22,19 +22,23 @@ window.addEventListener("resize", () => {
 });
 document.addEventListener("DOMContentLoaded", function () {
   const params = new URLSearchParams(window.location.search);
-  let searchQuery = params.get("location");
+  const searchQuery = params.get("location");
+  const selectedType = params.get("type");
 
   const container = document.getElementById("results");
 
-  if (!searchQuery) {
-    container.innerText = "No location provided.";
+  if (!searchQuery || !selectedType) {
+    container.innerText = "Location and type must be provided.";
     return;
   }
 
   fetch("/project/api/listing.php", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({ location: searchQuery }),
+    body: new URLSearchParams({
+      location: searchQuery,
+      type: selectedType,
+    }),
   })
     .then((res) => res.json())
     .then((data) => {
@@ -46,9 +50,9 @@ document.addEventListener("DOMContentLoaded", function () {
             .map(
               (listing) => `
                 <div class="listing">
-                  <img src=${listing.image_url}  alt="property_image" />
+                  <img src="${listing.image_url}" alt="property_image" />
                   <div class="listing_content">
-                   <p class="listing_content_price">
+                    <p class="listing_content_price">
                       <span>
                         ${Math.round(parseFloat(listing.rental_price) / 117)}€
                       </span>
@@ -57,17 +61,19 @@ document.addEventListener("DOMContentLoaded", function () {
                     <h4>${listing.city_area}</h4>
                     <p>${listing.address}</p>
                     <div class="listing_content_properties">
-                        <p>
-                          <img src="/project/assets/bed.svg" alt="bed icon" class="icon" />
-                          ${listing.beds} beds
-                        </p>
-                        <p>
-                          <img src="/project/assets/bath.svg" alt="bathroom icon" class="icon" />
-                          ${listing.bathroom} bathrooms
-                        </p>
-                      <p><i class="bi bi-aspect-ratio"></i> ${
-                        listing.square_meters
-                      } m²</p>
+                      <p>
+                        <img src="/project/assets/bed.svg" alt="bed icon" class="icon" />
+                        ${listing.beds} beds
+                      </p>
+                      <p>
+                        <img src="/project/assets/bath.svg" alt="bathroom icon" class="icon" />
+                        ${listing.bathroom} bathrooms
+                      </p>
+                      <p>
+                        <i class="bi bi-aspect-ratio"></i> ${
+                          listing.square_meters
+                        } m²
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -83,6 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
       container.innerText = "Fetch error: " + err;
     });
 });
+
 window.addEventListener("DOMContentLoaded", () => {
   fetch("/project/api/get_cities.php")
     .then((res) => res.json())
@@ -99,19 +106,24 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 document.getElementById("searchForm").addEventListener("submit", function (e) {
-  e.preventDefault(); // Prevent form from actually submitting
+  e.preventDefault(); // Prevent form from submitting
 
   const location = document.getElementById("location").value.trim();
+  const type = document.getElementById("type").value; // Get selected type
   const container = document.getElementById("results");
 
   if (location.length < 2) {
     console.warn("Please enter at least 2 characters.");
     return;
   }
+
   fetch("/project/api/listing.php", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({ location: location }),
+    body: new URLSearchParams({
+      location: location,
+      type: type,
+    }),
   })
     .then((res) => res.json())
     .then((data) => {
@@ -123,9 +135,9 @@ document.getElementById("searchForm").addEventListener("submit", function (e) {
             .map(
               (listing) => `
                 <div class="listing">
-                  <img src=${listing.image_url}  alt="property_image" />
+                  <img src="${listing.image_url}" alt="property_image" />
                   <div class="listing_content">
-                   <p class="listing_content_price">
+                    <p class="listing_content_price">
                       <span>
                         ${Math.round(parseFloat(listing.rental_price) / 117)}€
                       </span>
@@ -134,14 +146,14 @@ document.getElementById("searchForm").addEventListener("submit", function (e) {
                     <h4>${listing.city_area}</h4>
                     <p>${listing.address}</p>
                     <div class="listing_content_properties">
-                        <p>
-                          <img src="/project/assets/bed.svg" alt="bed icon" class="icon" />
-                          ${listing.beds} beds
-                        </p>
-                        <p>
-                          <img src="/project/assets/bath.svg" alt="bathroom icon" class="icon" />
-                          ${listing.bathroom} bathrooms
-                        </p>
+                      <p>
+                        <img src="/project/assets/bed.svg" alt="bed icon" class="icon" />
+                        ${listing.beds} beds
+                      </p>
+                      <p>
+                        <img src="/project/assets/bath.svg" alt="bathroom icon" class="icon" />
+                        ${listing.bathroom} bathrooms
+                      </p>
                       <p><i class="bi bi-aspect-ratio"></i> ${
                         listing.square_meters
                       } m²</p>

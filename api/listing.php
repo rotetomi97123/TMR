@@ -12,10 +12,11 @@ try {
         exit;
     }
 
-    // Get the posted location safely
+    // Get the posted location and type safely
     $location = isset($_POST['location']) ? trim($_POST['location']) : '';
+    $type = isset($_POST['type']) ? trim($_POST['type']) : '';
 
-    // Validate
+    // Validate inputs
     if (empty($location)) {
         echo json_encode([
             'success' => false,
@@ -24,17 +25,27 @@ try {
         exit;
     }
 
-    // Prepare SQL
+    if (empty($type)) {
+        echo json_encode([
+            'success' => false,
+            'error' => 'Type is required.'
+        ]);
+        exit;
+    }
+
+    // Prepare SQL with type filter
     $stmt = $pdo->prepare("
         SELECT * FROM listings 
         WHERE status = 'approved' 
         AND is_visible = 1 
         AND city_area LIKE :location 
+        AND property_type = :type
         ORDER BY created_at DESC
     ");
 
     $stmt->execute([
-        ':location' => '%' . $location . '%'
+        ':location' => '%' . $location . '%',
+        ':type' => $type
     ]);
 
     $listings = $stmt->fetchAll();
