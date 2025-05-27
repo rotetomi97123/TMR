@@ -3,7 +3,7 @@ header('Content-Type: application/json');
 require_once '../db_config.php';
 
 try {
-    // Make sure it's a POST request
+
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         echo json_encode([
             'success' => false,
@@ -12,11 +12,9 @@ try {
         exit;
     }
 
-    // Get the posted location and type safely
     $location = isset($_POST['location']) ? trim($_POST['location']) : '';
     $type = isset($_POST['type']) ? trim($_POST['type']) : '';
 
-    // Validate inputs
     if (empty($location)) {
         echo json_encode([
             'success' => false,
@@ -33,7 +31,6 @@ try {
         exit;
     }
 
-    // Prepare SQL with type filter
     $stmt = $pdo->prepare("
         SELECT * FROM listings 
         WHERE status = 'approved' 

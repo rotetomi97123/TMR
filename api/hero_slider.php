@@ -3,7 +3,6 @@ header('Content-Type: application/json');
 require_once '../db_config.php';
 
 try {
-    // Make sure it's a POST request
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         echo json_encode([
             'success' => false,
@@ -12,7 +11,6 @@ try {
         exit;
     }
 
-    // Prepare SQL to get first 4 approved and visible listings
     $stmt = $pdo->prepare("
         SELECT * FROM listings 
         WHERE status = 'approved' 
