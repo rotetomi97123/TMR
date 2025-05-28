@@ -51,6 +51,30 @@
                   <option value="house">House</option>
                 </Select>
               </div>
+              <div class="form-group">
+                <label for="rental_price">Price to €</label>
+                <input 
+                  type="number" 
+                  name="rental_price" 
+                  class="form-input" 
+                  id="rental_price" 
+                  min="0" 
+                  max="1000000" 
+                  step="1" 
+                />
+              </div>
+              <div class="form-group">
+                <label for="square_meters">Area from (m²)</label>
+                <input 
+                  type="number" 
+                  name="square_meters" 
+                  class="form-input" 
+                  id="square_meters" 
+                  min="0" 
+                  max="1000000" 
+                  step="1" 
+                />
+              </div>
               <div class="form-group-submit">  
                 <input type="submit" value="Browse properties" class="form-submit" />
               </div>
@@ -60,7 +84,7 @@
         </div>
         <div id="results">Loading...</div>
       </div>
-
+    <script src="../js/navbar.js"></script>
     <script src="../js/result.js"></script>
 
   </body>

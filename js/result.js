@@ -1,23 +1,6 @@
-const toggle = document.getElementById("menu-toggle");
-const menuIcon = document.getElementById("menu-icon");
-const mobileMenu = document.getElementById("mobile-menu");
 const resultsContainer = document.getElementById("results");
 const locationSelect = document.getElementById("location");
 const searchForm = document.getElementById("searchForm");
-
-function toggleMenu() {
-  mobileMenu.classList.toggle("active");
-  menuIcon.classList.toggle("bi-list");
-  menuIcon.classList.toggle("bi-x");
-}
-
-function closeMenuOnResize() {
-  if (window.innerWidth > 768) {
-    mobileMenu.classList.remove("active");
-    menuIcon.classList.add("bi-list");
-    menuIcon.classList.remove("bi-x");
-  }
-}
 
 function renderListings(listings) {
   if (!listings.length) {
@@ -63,12 +46,24 @@ function renderListings(listings) {
   });
 }
 
-function fetchListings(location, type, listing_type) {
+function fetchListings(
+  location,
+  type,
+  listing_type,
+  rental_price,
+  square_meters
+) {
   resultsContainer.innerText = "Loading...";
   fetch("/project/api/listing.php", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({ location, type, listing_type }),
+    body: new URLSearchParams({
+      location,
+      type,
+      listing_type,
+      rental_price,
+      square_meters,
+    }),
   })
     .then((res) => res.json())
     .then((data) => {
@@ -111,20 +106,20 @@ async function handleInitialSearch() {
   const location = params.get("location");
   const type = params.get("type");
   const listing_type = params.get("listing_type");
+  const rental_price = params.get("rental_price");
+  const square_meters = params.get("square_meters");
 
   if (!location || !type || !listing_type) {
     resultsContainer.innerText =
-      "Location, type, and listing type must be provided.";
+      "Location, type,price, and listing type must be provided.";
     return;
   }
 
   await loadCities(); // wait for cities to load first
   prefillForm({ location, type, listing_type });
-  fetchListings(location, type, listing_type);
+  fetchListings(location, type, listing_type, rental_price, square_meters);
 }
 
-toggle.addEventListener("click", toggleMenu);
-window.addEventListener("resize", closeMenuOnResize);
 window.addEventListener("DOMContentLoaded", () => {
   handleInitialSearch();
 });
@@ -137,6 +132,8 @@ searchForm.addEventListener("submit", (e) => {
     'input[name="listing_type"]:checked'
   );
   const listing_type = listingTypeRadio ? listingTypeRadio.value : "";
+  const rental_price = document.getElementById("rental_price").value.trim();
+  const square_meters = document.getElementById("square_meters").value.trim();
 
   if (location.length < 2) {
     console.warn("Please enter at least 2 characters.");
@@ -147,5 +144,5 @@ searchForm.addEventListener("submit", (e) => {
     return;
   }
 
-  fetchListings(location, type, listing_type);
+  fetchListings(location, type, listing_type, rental_price, square_meters);
 });

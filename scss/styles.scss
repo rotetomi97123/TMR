@@ -315,10 +315,18 @@ html {
   padding: 25px 16px 25px 32px;
   &:first-of-type {
     border-bottom-left-radius: 8px;
+    @media (max-width: 1024px) {
+      border-bottom-left-radius: unset;
+      border-top-right-radius: 8px;
+    }
   }
   @media (max-width: 1024px) {
     width: 100%;
     padding: 10px 25px;
+  }
+  input[type="number"]:focus {
+    border-color: #009688;
+    outline: none;
   }
 }
 .form-group-submit {
@@ -334,7 +342,9 @@ html {
     width: 100%;
     justify-content: flex-start;
     align-items: center;
-    padding: 10px 25px;
+    padding: 10px 25px 20px 25px;
+    border-top-right-radius: unset;
+    border-bottom-left-radius: 8px;
   }
 }
 .form-group label {
@@ -351,9 +361,11 @@ select {
   font-size: 16px;
   transition: border-color 0.2s ease;
   max-width: 150px;
+  @media (max-width: 768px) {
+    max-width: unset;
+  }
 }
 
-.form-input,
 select:focus {
   border-color: #009688;
   outline: none;

@@ -1,24 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const toggle = document.getElementById("menu-toggle");
-  const menuIcon = document.getElementById("menu-icon");
-  const mobileMenu = document.getElementById("mobile-menu");
-
-  toggle?.addEventListener("click", () => {
-    mobileMenu?.classList.toggle("active");
-    if (menuIcon?.classList.contains("bi-list")) {
-      menuIcon.classList.replace("bi-list", "bi-x");
-    } else {
-      menuIcon?.classList.replace("bi-x", "bi-list");
-    }
-  });
-
-  window.addEventListener("resize", () => {
-    if (window.innerWidth > 768) {
-      mobileMenu?.classList.remove("active");
-      menuIcon?.classList.replace("bi-x", "bi-list");
-    }
-  });
-
   // Handle search form
   document
     .getElementById("searchForm")

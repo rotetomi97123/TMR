@@ -45,6 +45,7 @@
     </div>
   </div>
     <?php include 'includes/newhome.php'; ?>
+    <script src="js/navbar.js"></script>
     <script src="js/main.js"></script>
   </body>
 </html>

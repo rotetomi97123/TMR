@@ -25,7 +25,7 @@
   <body>
     <?php include '../includes/header.php'; ?>
       <div id="itemContainer"></div>
-
+    <script src="../js/navbar.js"></script>
     <script src="../js/item.js"></script>
   </body>
 </html>
