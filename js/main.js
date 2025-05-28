@@ -24,15 +24,32 @@ document.addEventListener("DOMContentLoaded", () => {
     .getElementById("searchForm")
     ?.addEventListener("submit", function (e) {
       e.preventDefault();
+
       const location = document.getElementById("location").value.trim();
       const type = document.getElementById("type").value;
+
+      // Get selected radio button value for listing_type
+      const listingTypeRadio = document.querySelector(
+        'input[name="listing_type"]:checked'
+      );
+      const listing_type = listingTypeRadio ? listingTypeRadio.value : "";
+
       if (location.length < 2) {
         console.warn("Please enter at least 2 characters.");
         return;
       }
+
+      if (!listing_type) {
+        console.warn("Please select a listing type.");
+        return;
+      }
+
+      // Redirect with all parameters
       window.location.href = `pages/results.php?location=${encodeURIComponent(
         location
-      )}&type=${encodeURIComponent(type)}`;
+      )}&type=${encodeURIComponent(type)}&listing_type=${encodeURIComponent(
+        listing_type
+      )}`;
     });
 
   // Populate location dropdown
@@ -49,65 +66,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       });
   });
-
-  // Fetch and display hero listings
-  window.addEventListener("DOMContentLoaded", () => {
-    fetch("/project/api/hero_listing.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ location: "Beograd" }),
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        if (response.success) {
-          const listings = response.data;
-          const container = document.getElementById("listingsContainer");
-          if (!container) return;
-
-          container.innerHTML = "";
-
-          listings.forEach((listing) => {
-            const div = document.createElement("div");
-            div.classList.add("listing");
-            div.innerHTML = `
-            <div class="listing2">
-              <img src="${
-                listing.image_url
-              }" alt="property_image" class="hero_image"/>
-              <div class="listing_content">
-                <p class="listing_content_price">
-                  <span>${Math.round(
-                    parseFloat(listing.rental_price) / 117
-                  )}€</span>/month
-                </p>
-                <h4>${listing.city_area}</h4>
-                <p>${listing.address}</p>
-                <div class="listing_content_properties">
-                  <p><img src="/project/assets/bed.svg" class="icon" /> ${
-                    listing.beds
-                  } beds</p>
-                  <p><img src="/project/assets/bath.svg" class="icon" /> ${
-                    listing.bathroom
-                  } bathrooms</p>
-                  <p><i class="bi bi-aspect-ratio"></i> ${
-                    listing.square_meters
-                  } m²</p>
-                </div>
-              </div>
-            </div>
-          `;
-
-            div.addEventListener("click", () => {
-              localStorage.setItem("selectedListing", JSON.stringify(listing));
-              window.location.href = "/project/pages/item.php";
-            });
-
-            container.appendChild(div);
-          });
-        }
-      });
-  });
-
   let currentProperty = 0;
   let autoRotateInterval;
 
@@ -177,7 +135,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const dots = document.querySelector(".showcase_dots");
 
         data.data.forEach((listing, index) => {
-          const priceEUR = Math.round(parseFloat(listing.rental_price) / 117);
+          let priceEUR =
+            Math.floor(parseFloat(listing.rental_price) / 117 / 1000) * 1000;
+
+          priceEUR = priceEUR.toLocaleString("de-DE") + " €";
           const imageUrl =
             listing.image_url || "https://via.placeholder.com/400x250";
           const badgeText =
@@ -194,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="property_badge">${badgeText}</div>
           </div>
           <div class="property_info">
-            <p class="property_price"><span>€${priceEUR}</span>/month</p>
+            <p class="property_price"><span>€${priceEUR}</span></p>
             <h4 class="property_title">${
               listing.title || "Untitled Property"
             }</h4>

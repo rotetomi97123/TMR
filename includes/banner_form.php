@@ -12,16 +12,17 @@
           </div>
         </div>
         <form id="searchForm" class="searchForm">
-          <div class="radio_wrapper"> 
-            <label class="radio-label">
-              <input type="radio" name="option" value="rent" checked  />
-              <div class="radio-text">Rent</div>
-            </label>
-            <label class="radio-label">
-              <input type="radio" name="option" value="buy" />
-              <div class="radio-text">Buy</div>
-            </label>     
-          </div>
+         <div class="radio_wrapper"> 
+          <label class="radio-label" for="listing_type_rent">
+            <input type="radio" name="listing_type" value="rent" id="listing_type_rent" checked />
+            <div class="radio-text">Rent</div>
+          </label>
+          <label class="radio-label" for="listing_type_sale">
+            <input type="radio" name="listing_type" value="sale" id="listing_type_sale" />
+            <div class="radio-text">Buy</div>
+          </label>     
+        </div>
+
           <div class="form-group-flex">
             <div class="form-group">
               <label for="location">Location</label>
