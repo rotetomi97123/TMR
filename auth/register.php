@@ -1,21 +1,14 @@
 <?php
 require_once '../db_config.php';
-
-// Include Composer's autoloader for PHPMailer
 require_once __DIR__ . '/../vendor/autoload.php';
 
-
 use Dotenv\Dotenv;
-
-// Tell Dotenv to look for .env one folder up (root)
-$dotenv = Dotenv::createImmutable(__DIR__ . '/..');
-$dotenv->load();
-
-    
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-
+// Load environment
+$dotenv = Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv->load();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username']);
@@ -24,77 +17,82 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $first_name = trim($_POST['first_name']);
     $last_name = trim($_POST['last_name']);
     $phone = trim($_POST['phone']);
-    $role = 'user';  // default role
-    
-    // Basic validation (you can expand this)
+    $role = 'user';
+
     if (empty($username) || empty($email) || empty($password)) {
         die("Please fill in all required fields.");
     }
 
-    // Check if username or email exists
     $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ? OR email = ?");
     $stmt->execute([$username, $email]);
     if ($stmt->fetch()) {
         die("Username or email already taken.");
     }
 
-    // Hash password
     $password_hash = password_hash($password, PASSWORD_BCRYPT);
-
-    // Generate activation token
     $activation_token = bin2hex(random_bytes(16));
-    
-    // Insert user with is_active = 0 (inactive)
+
     $stmt = $pdo->prepare("INSERT INTO users 
         (username, email, password_hash, first_name, last_name, phone, role, is_active, activation_token)
         VALUES (?, ?, ?, ?, ?, ?, ?, 0, ?)");
     $stmt->execute([$username, $email, $password_hash, $first_name, $last_name, $phone, $role, $activation_token]);
 
-    // Prepare activation email
     $activation_link = "http://localhost:3000/project/pages/activate.php?token=" . $activation_token;
 
-    // Send email with PHPMailer and Mailtrap
     $mail = new PHPMailer(true);
 
     try {
-        // Server settings
+        // SMTP config for Mailjet
         $mail->isSMTP();
-        $mail->Host       = $_ENV['MAIL_HOST'];;
+        $mail->Host       = $_ENV['MAIL_HOST'];
         $mail->SMTPAuth   = true;
-        $mail->Username   = $_ENV['MAIL_USER'];; // replace with your Mailtrap username
-        $mail->Password   = $_ENV['MAIL_PASS'];; // replace with your Mailtrap password
+        $mail->Username   = $_ENV['MAIL_USER'];
+        $mail->Password   = $_ENV['MAIL_PASS'];
         $mail->SMTPSecure = 'tls';
-        $mail->Port       = 2525;
+        $mail->Port       = $_ENV['MAIL_PORT'];
 
-        // Recipients
+        // Email settings
         $mail->setFrom('tot.tamas04@gmail.com', 'StanoviSrbija');
         $mail->addAddress($email, $username);
 
-        // Content
         $mail->isHTML(true);
         $mail->Subject = 'Activate your account';
-        $mail->Body    = '
-            <p>Hi ' . htmlspecialchars($username) . ',</p>
-            <p>Thanks for registering! Please activate your account by clicking the button below:</p>
-            <p>
-                <a href="' . $activation_link . '" style="
-                   background-color: #28a745;
-                   color: white;
-                   padding: 12px 24px;
-                   text-decoration: none;
-                   font-weight: bold;
-                   border-radius: 5px;
-                   display: inline-block;">
-                   Activate Account
-                </a>
-            </p>
-            <p>If you did not register, please ignore this email.</p>
+        $mail->Body = '
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 8px;">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <img src="https://i.ibb.co/tTTkb0xY/Stanovi-Srbije-Logo.png" alt="StanoviSrbija Logo" style="max-width: 150px;">
+                </div>
+                <h2 style="color: #00796b; text-align: center;">Welcome to StanoviSrbija, ' . htmlspecialchars($username) . '!</h2>
+                <p style="font-size: 16px; color: #333; text-align: center;">
+                    Thanks for registering. To complete your registration, please activate your account by clicking the button below:
+                </p>
+                <p style="text-align: center; margin: 30px 0;">
+                    <a href="' . $activation_link . '" style="
+                        background-color: #00796b;
+                        color: #ffffff;
+                        padding: 14px 28px;
+                        text-decoration: none;
+                        font-size: 16px;
+                        font-weight: bold;
+                        border-radius: 6px;
+                        display: inline-block;">
+                        Activate Account
+                    </a>
+                </p>
+                <p style="font-size: 14px; color: #555; text-align: center;">
+                    If you did not register, you can safely ignore this email.
+                </p>
+                <p style="font-size: 12px; color: #999; margin-top: 40px; text-align: center;">
+                    &copy; ' . date('Y') . ' StanoviSrbija. All rights reserved.
+                </p>
+            </div>
         ';
+
 
         $mail->send();
         echo "Registration successful! Please check your email to activate your account.";
+        header("refresh:3;url=../pages/login.php");
     } catch (Exception $e) {
         echo "Registration successful, but failed to send activation email. Mailer Error: {$mail->ErrorInfo}";
     }
 }
-?>
