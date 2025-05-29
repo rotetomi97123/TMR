@@ -14,7 +14,7 @@ const paths = {
   scss: {
     entry: "scss/styles.scss",
     dest: "css",
-    watch: "scss/**/*.scss"
+    watch: "scss/**/*.scss",
   },
   php: {
     src: "**/*.php", // Watch all PHP files, including index.php and includes

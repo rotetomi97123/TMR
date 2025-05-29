@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <nav class="navbar">
   <div class="nav-desktop-menu">
     <div class="nav-logo">
@@ -12,12 +13,17 @@
     </ul>
   </div>
   <div class="nav-auth">
-    <a href="#" class="nav-auth-login">Login</a>
-    <a href="#" class="nav-auth-register">Sign Up</a>
+    <?php if (isset($_SESSION['user_id'])): ?>
+      <span class="nav-username">Welcome, <?= htmlspecialchars($_SESSION['username']) ?></span>
+      <a href="auth/logout.php" class="nav-auth-logout" style="margin-left: 10px;">Logout</a>
+    <?php else: ?>
+      <a href="/project/pages/login.php" class="nav-auth-login">Login</a>
+      <a href="/project/pages/register.php" class="nav-auth-register">Sign Up</a>
+    <?php endif; ?>
   </div>
 
   <div class="nav-toggle" id="menu-toggle">
-    <i class="bi bi-list" id="menu-icon" ></i>
+    <i class="bi bi-list" id="menu-icon"></i>
   </div>
 
   <div class="nav-mobile-menu" id="mobile-menu">
@@ -27,8 +33,13 @@
       <li><a href="index.php">Sell <i class="bi bi-chevron-right"></i></a></li>
     </ul>
     <div class="nav-auth-mobile">
-      <a href="#" class="nav-auth-login">Login</a>
-      <a href="#" class="nav-auth-register">Sign Up</a>
+      <?php if (isset($_SESSION['user_id'])): ?>
+        <span class="nav-username-mobile">Welcome, <?= htmlspecialchars($_SESSION['username']) ?></span>
+        <a href="auth/logout.php" class="nav-auth-logout-mobile" style="margin-left: 10px;">Logout</a>
+      <?php else: ?>
+        <a href="/project/pages/login.php" class="nav-auth-login">Login</a>
+        <a href="/project/pages/register.php" class="nav-auth-register">Sign Up</a>
+      <?php endif; ?>
     </div>
   </div>
 </nav>
