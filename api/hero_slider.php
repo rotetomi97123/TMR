@@ -15,7 +15,7 @@ try {
         SELECT * FROM listings 
         WHERE status = 'approved' 
         AND is_visible = 1 
-        ORDER BY created_at DESC 
+        ORDER BY created_at ASC
         LIMIT 3
     ");
 

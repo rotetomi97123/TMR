@@ -8,6 +8,6 @@ $_SESSION = [];
 session_destroy();
 
 // Redirect to login or homepage after logout
-header("Location: ../pages/login.php");
+header("Location: /project/pages/login.php");
 exit;
 ?>

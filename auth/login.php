@@ -3,14 +3,13 @@ require_once '../db_config.php';
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $input = trim($_POST['username_or_email'] ?? '');  // could be username or email
+    $input = trim($_POST['username_or_email'] ?? ''); 
     $password = $_POST['password'] ?? '';
 
     if (empty($input) || empty($password)) {
         die("Please enter both username/email and password.");
     }
 
-    // Fetch user by username OR email
     $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ? OR email = ?");
     $stmt->execute([$input, $input]);
     $user = $stmt->fetch();
@@ -33,6 +32,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
         $_SESSION['role'] = $user['role'];
+        $_SESSION['email'] = $user['email'];
+        $_SESSION['first_name'] = $user['first_name'];
+        $_SESSION['last_name'] = $user['last_name'];
+        $_SESSION['phone'] = $user['phone'];
+        
+        
 
         header("Location: ../index.php");
         exit;

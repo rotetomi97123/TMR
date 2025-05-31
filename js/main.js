@@ -115,10 +115,17 @@ document.addEventListener("DOMContentLoaded", () => {
         const dots = document.querySelector(".showcase_dots");
 
         data.data.forEach((listing, index) => {
-          let priceEUR =
-            Math.floor(parseFloat(listing.rental_price) / 117 / 1000) * 1000;
-
-          priceEUR = priceEUR.toLocaleString("de-DE") + " €";
+          let priceDisplay = "";
+          if (listing.listing_type === "sale") {
+            let priceEUR =
+              Math.floor(parseFloat(listing.rental_price) / 117 / 1000) * 1000;
+            priceDisplay = priceEUR.toLocaleString("de-DE") + " €";
+          } else {
+            // Rental price formatting
+            const price =
+              Math.ceil(parseFloat(listing.rental_price) / 117 / 50) * 50;
+            priceDisplay = `€${price}/month`;
+          }
           const imageUrl =
             listing.image_url || "https://via.placeholder.com/400x250";
           const badgeText =
@@ -135,7 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="property_badge">${badgeText}</div>
           </div>
           <div class="property_info">
-            <p class="property_price"><span>€${priceEUR}</span></p>
+            <p class="property_price"><span>${priceDisplay}</span></p>
             <h4 class="property_title">${
               listing.title || "Untitled Property"
             }</h4>
