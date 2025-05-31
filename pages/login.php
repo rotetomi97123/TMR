@@ -1,4 +1,5 @@
 <?php
+require_once '../includes/config.php';
 $error = '';
 if (isset($_GET['error'])) {
     $error = htmlspecialchars($_GET['error']);
@@ -36,7 +37,7 @@ if (isset($_GET['error'])) {
     <?php endif; ?>
 
  <div class="form-wrapper">
-        <form action="/project/auth/login.php" method="POST" class="form-auth">
+        <form action="<?= $base_url ?>auth/login.php" method="POST" class="form-auth">
             <h2 class="form-auth-title">Login</h2>
             <div class="form-auth-accent"></div>
             <div class="form-auth-group">

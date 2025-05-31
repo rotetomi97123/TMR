@@ -1,17 +1,20 @@
 <?php
-require_once '../session.php';
+require_once '../includes/session.php';
+require_once '../includes/config.php';
 
 require_once '../db_config.php';
 session_start();
 
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: /project/pages/profil.php");
+    header('Location:' . $base_url .  'pages/profil.php');
+
     exit;
 }
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: /project/pages/login.php");
+    header('Location:' . $base_url .  'pages/login.php');
+
     exit;
 }
 
@@ -48,7 +51,8 @@ if (!empty($errors)) {
     foreach ($errors as $error) {
         echo "<p style='color:red'>" . htmlspecialchars($error) . "</p>";
     }
-    echo '<p><a href="/project/pages/profil.php">Go back to profile</a></p>';
+    echo '<p><a href="' . $base_url . 'pages/profil.php">Go back to profile</a></p>';
+
     exit;
 }
 
@@ -61,10 +65,11 @@ try {
     $_SESSION['last_name'] = $lastName;
     $_SESSION['phone'] = $phone;
 
-    header("Location: /project/pages/profil.php");
+    header('Location:' . $base_url .  'pages/profil.php');
+
     exit;
 } catch (PDOException $e) {
     echo "<p style='color:red'>Database error: " . htmlspecialchars($e->getMessage()) . "</p>";
-    echo '<p><a href="/project/pages/profil.php">Go back to profile</a></p>';
+    echo '<p><a href="' . $base_url . 'pages/profil.php">Go back to profile</a></p>';
     exit;
 }

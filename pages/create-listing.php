@@ -1,14 +1,15 @@
 <?php
+require_once '../includes/session.php';
+require_once '../db_config.php';
+require_once '../includes/config.php';
 
 if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
-require_once '../session.php';
+  session_start();
+}
 
-require_once '../db_config.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: /project/pages/login.php');
+    header('Location:' . $base_url .  'pages/login.php');
     exit;
 }
 
@@ -59,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $listing_type, $rental_price, $address, $beds ?: null, $bathroom ?: null, $square_meters ?: null, $imagePath
         ]);
         $success = true;
-        header("Location: /project/pages/profil.php");
+      header('Location:' . $base_url .  'pages/profil.php');
 
     }
 }
@@ -167,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label class="form-label">Square Meters</label>
         <input type="number" name="square_meters" class="form-control" />
       </div>
-      <a href="/project/pages/profil.php" class="submit-button">Cancel</a>
+      <a href="<?= $base_url ?>pages/profil.php" class="submit-button">Cancel</a>
       <button type="submit" class="submit-button">Submit Listing</button>
     </form>
   </div>

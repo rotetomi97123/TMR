@@ -1,16 +1,7 @@
 <?php
-// Start session if you want to use session messages (optional)
-// session_start();
+require_once '../includes/config.php';
 
 $error = '';
-
-// If you want to handle form in the same file, put your PHP handler here above the HTML
-// Or just include the handler here and display errors from it
-
-// For simplicity, assume you POST to a handler like auth/register_handler.php
-// and pass errors back with GET or session messages
-
-// Example: get error from GET param (if redirected with error)
 if (isset($_GET['error'])) {
     $error = htmlspecialchars($_GET['error']);
 }
@@ -49,7 +40,7 @@ if (isset($_GET['error'])) {
 <?php endif; ?>
 
     <div class="form-wrapper">
-        <form action="/project/auth/register.php" method="POST" class="form-auth">
+        <form action="<?= $base_url ?>auth/register.php" method="POST" class="form-auth">
             <h2 class="form-auth-title">Register</h2>
             <div class="form-auth-accent"></div>
             <div class="form-auth-group">

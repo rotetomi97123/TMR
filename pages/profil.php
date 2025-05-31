@@ -1,8 +1,9 @@
 
 <?php
-    require_once '../session.php';
-
+    require_once '../includes/session.php';
+    require_once '../includes/config.php';
     include_once "../db_config.php";
+
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }    
@@ -93,7 +94,7 @@
         <div class="profile-card">
         <h3>Your Listings</h3>
           <div class="create-listing-button-wrapper">
-            <a href="/project/pages/create-listing.php" class="btn-create-listing">+ Create New Listing</a>
+            <a href="<?= $base_url ?>pages/create-listing.php" class="btn-create-listing">+ Create New Listing</a>
           </div>
         <?php if (empty($listings)): ?>
             <p>You have no active listings yet.</p>
@@ -145,5 +146,6 @@
         <?php endif; ?>
         </div>
         </div>
+    
   </body>
   </html>

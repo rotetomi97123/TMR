@@ -30,8 +30,14 @@ function renderListings(listings) {
         <h4>${listing.city_area}</h4>
         <p>${listing.address}</p>
         <div class="listing_content_properties">
-          <p><img src="/project/assets/bed.svg" alt="bed icon" class="icon" /> ${listing.beds} beds</p>
-          <p><img src="/project/assets/bath.svg" alt="bathroom icon" class="icon" /> ${listing.bathroom} bathrooms</p>
+          <p><img src=${
+            BASE_URL + "assets/bed.svg"
+          } alt="bed icon" class="icon" /> ${listing.beds} beds</p>
+          <p><img src=${
+            BASE_URL + "assets/bath.svg"
+          } alt="bathroom icon" class="icon" /> ${
+      listing.bathroom
+    } bathrooms</p>
           <p><i class="bi bi-aspect-ratio"></i> ${listing.square_meters} m²</p>
         </div>
       </div>
@@ -39,7 +45,7 @@ function renderListings(listings) {
 
     card.addEventListener("click", () => {
       localStorage.setItem("selectedListing", JSON.stringify(listing));
-      window.location.href = "/project/pages/item.php";
+      window.location.href = BASE_URL + "pages/item.php";
     });
 
     resultsContainer.appendChild(card);
@@ -54,7 +60,7 @@ function fetchListings(
   square_meters
 ) {
   resultsContainer.innerText = "Loading...";
-  fetch("/project/api/listing.php", {
+  fetch(BASE_URL + "api/listing.php", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({
@@ -77,7 +83,7 @@ function fetchListings(
 
 // Load cities and return a Promise so we can await it
 function loadCities() {
-  return fetch("/project/api/get_cities.php")
+  return fetch(BASE_URL + "api/get_cities.php")
     .then((res) => res.json())
     .then((cities) => {
       locationSelect.innerHTML = ""; // Clear previous options

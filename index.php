@@ -45,6 +45,10 @@
     </div>
   </div>
     <?php include 'includes/newhome.php'; ?>
+    <?php require_once 'includes/config.php'; ?>
+      <script>
+        const BASE_URL = "<?= $base_url ?>";
+      </script>
     <script src="js/navbar.js"></script>
     <script src="js/main.js"></script>
   </body>

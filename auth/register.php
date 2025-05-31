@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         VALUES (?, ?, ?, ?, ?, ?, ?, 0, ?)");
     $stmt->execute([$username, $email, $password_hash, $first_name, $last_name, $phone, $role, $activation_token]);
 
-    $activation_link = "http://localhost:3000/project/pages/activate.php?token=" . $activation_token;
+    $activation_link = "http://" . $_SERVER['HTTP_HOST'] . $base_url . "pages/activate.php?token=" . $activation_token;
 
     $mail = new PHPMailer(true);
 

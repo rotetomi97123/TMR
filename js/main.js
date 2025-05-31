@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Populate location dropdown
   window.addEventListener("DOMContentLoaded", () => {
-    fetch("/project/api/get_cities.php")
+    fetch(BASE_URL + "api/get_cities.php")
       .then((res) => res.json())
       .then((cities) => {
         const select = document.getElementById("location");
@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Fetch slider data
-  fetch("/project/api/hero_slider.php", { method: "POST" })
+  fetch(BASE_URL + "api/hero_slider.php", { method: "POST" })
     .then((res) => res.json())
     .then((data) => {
       if (data.success && data.data.length > 0) {
@@ -135,7 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
           card.className = "property_card";
           card.addEventListener("click", () => {
             localStorage.setItem("selectedListing", JSON.stringify(listing));
-            window.location.href = "/project/pages/item.php";
+            window.location.href = BASE_URL + "pages/item.php";
           });
           card.innerHTML = `
           <div class="property_image" style="background-image: url('${imageUrl}');">
@@ -148,12 +148,12 @@ document.addEventListener("DOMContentLoaded", () => {
             }</h4>
             <p class="property_location">${listing.city_area}</p>
             <div class="property_features">
-              <p><img src="/project/assets/bed.svg" class="icon" /> ${
-                listing.beds
-              } beds</p>
-              <p><img src="/project/assets/bath.svg" class="icon" /> ${
-                listing.bathroom
-              } bathrooms</p>
+              <p><img src=${BASE_URL + "assets/bed.svg"} class="icon" /> ${
+            listing.beds
+          } beds</p>
+              <p><img src=${BASE_URL + "assets/bath.svg"} class="icon" /> ${
+            listing.bathroom
+          } bathrooms</p>
               <p><i class="bi bi-aspect-ratio"></i> ${
                 listing.square_meters
               } m²</p>
