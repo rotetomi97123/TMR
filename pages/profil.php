@@ -63,94 +63,98 @@ $listings = $stmtListings->fetchAll(PDO::FETCH_ASSOC);
   <link rel="icon" href="../assets/favicon.ico" type="image/x-icon" />
 </head>
 <body>
-
+    <?php include "../includes/header.php"; ?>
+<div class="profile_wrapper">
   <div class="profile-card">
     <h2 class="profile-title">User Profile</h2>
-    <form action="save-profile.php" method="POST">
-      <table class="profile-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Phone</th>
-            <th>Role</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><input type="text" name="user_id" value="<?= htmlspecialchars($userId) ?>" readonly></td>
-            <td><input type="text" name="username" value="<?= htmlspecialchars($user['username']) ?>" readonly></td>
-            <td><input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" required></td>
-            <td><input type="text" name="first_name" value="<?= htmlspecialchars($user['first_name']) ?>"></td>
-            <td><input type="text" name="last_name" value="<?= htmlspecialchars($user['last_name']) ?>"></td>
-            <td><input type="text" name="phone" value="<?= htmlspecialchars($user['phone']) ?>"></td>
-            <td>
-              <select name="role" disabled>
-                <option value="guest" <?= $user['role'] === 'guest' ? 'selected' : '' ?>>Guest</option>
-                <option value="user" <?= $user['role'] === 'user' ? 'selected' : '' ?>>User</option>
-                <option value="admin" <?= $user['role'] === 'admin' ? 'selected' : '' ?>>Admin</option>
-              </select>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <br />
-      <button type="submit" class="save-button">Save Changes</button>
+    <form action="save-profile.php" method="POST" class="save_profile">
+            <div class="save-profile-flex">
+                <label for="username">Username: 
+                    <input type="text" name="username" class="save_profile_username" value="<?= htmlspecialchars($user['username']) ?>" > 
+                </label>
+                <div id="error_msg_username"></div>
+                <label for="email">Email: 
+                    <input type="email" name="email" class="save_profile_email" disabled value="<?= htmlspecialchars($user['email']) ?> " > 
+                </label>
+                <div></div>
+                <label for="first_name">First Name: 
+                    <input type="text" name="first_name"  class="save_profile_first_name"value="<?= htmlspecialchars($user['first_name']) ?>"> 
+                </label>
+                <div id="error_msg_first_name"></div>
+            </div>
+             <div class="save-profile-flex">
+                <label for="last_name">Last Name: 
+                    <input type="text" name="last_name"  class="save_profile_last_name"value="<?= htmlspecialchars($user['last_name']) ?>">  
+                </label>
+                <div id="error_msg_last_name"></div>
+                <label for="phone">Phone number: 
+                    <input type="text" name="phone" class="save_profile_phone" value="<?= htmlspecialchars($user['phone']) ?>">  
+                </label>
+                <div id="error_msg_phone"></div>
+                <button type="submit" class="save-button">Save Changes</button>
+                <?php if (isset($_GET['success']) && $_GET['success'] == '1'): ?>
+                    <div style="color: green; font-weight: bold; margin-bottom: 10px;">
+                        Profile updated successfully!
+                    </div>
+                    <?php endif; ?>
+                </div>
+
     </form>
   </div>
 
-  <div class="profile-card">
-    <h3>Your Listings</h3>
-    <a href="../pages/create-listing.php" class="btn-create-listing">+ Create New Listing</a>
+ <div class="profile-card">
+  <h3>Your Listings</h3>
+  <a href="../pages/create-listing.php" class="btn-create-listing">+ Create New Listing</a>
 
-    <?php if (empty($listings)): ?>
-      <p>You have no active listings yet.</p>
-    <?php else: ?>
-      <table class="profile-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>City</th>
-            <th>Type</th>
-            <th>Transaction</th>
-            <th>Price</th>
-            <th>Available From</th>
-            <th>Created At</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php foreach ($listings as $listing): ?>
-            <tr>
-              <td><?= htmlspecialchars($listing['property_id']) ?></td>
-              <td><?= htmlspecialchars($listing['title']) ?></td>
-              <td><?= htmlspecialchars($listing['city']) ?></td>
-              <td><?= ucfirst(htmlspecialchars($listing['property_type'])) ?></td>
-              <td><?= htmlspecialchars($listing['transaction']) ?></td>
-              <td>
-                <?php
-                  if ($listing['transaction'] === 'sale') {
-                    // Eladási ár logika (példa)
-                    $priceEUR = floor(floatval($listing['price']) / 117000) * 1000;
-                    echo number_format($priceEUR, 0, ',', '.') . " €";
-                  } else {
-                    // Bérleti ár logika (példa)
-                    $price = ceil(floatval($listing['price']) / (117 * 50)) * 50;
-                    echo "€" . number_format($price, 0, ',', '.') . "/month";
-                  }
-                ?>
-              </td>
-              <td><?= htmlspecialchars($listing['available_from'] ?? '-') ?></td>
-              <td><?= date('Y-m-d', strtotime($listing['created_at'])) ?></td>
-            </tr>
-          <?php endforeach; ?>
-        </tbody>
-      </table>
-    <?php endif; ?>
-  </div>
+  <?php if (isset($_GET['delete_success'])): ?>
+    <div style="color: green; font-weight: bold; margin-bottom: 10px;">
+      Listing deleted successfully!
+    </div>
+  <?php elseif (isset($_GET['delete_error'])): ?>
+    <div style="color: red; font-weight: bold; margin-bottom: 10px;">
+      Failed to delete listing.
+    </div>
+  <?php endif; ?>
+
+  <?php if (empty($listings)): ?>
+    <p>You have no active listings yet.</p>
+  <?php else: ?>
+    <div class="listing-cards">
+      <?php foreach ($listings as $listing): ?>
+        <div class="listing-card">
+          <div class="listing-image" style="background-image: url('<?= $listing['image_url'] ?? "../assets/placeholder.jpg" ?>');"></div>
+          <div class="listing-content">
+            <h4><?= htmlspecialchars($listing['title']) ?></h4>
+            <p><strong>City:</strong> <?= htmlspecialchars($listing['city']) ?></p>
+            <p><strong>Type:</strong> <?= ucfirst(htmlspecialchars($listing['property_type'])) ?></p>
+            <p><strong>Transaction:</strong> <?= htmlspecialchars($listing['transaction']) ?></p>
+            <p>
+              <strong>Price:</strong> <?= htmlspecialchars($listing['price']) ?>
+            </p>
+            <form action="delete-listing.php" method="POST" onsubmit="return confirm('Are you sure you want to delete this listing?');">
+              <input type="hidden" name="property_id" value="<?= $listing['property_id'] ?>">
+              <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+            </form>
+          </div>
+        </div>
+      <?php endforeach; ?>
+    </div>
+  <?php endif; ?>
+</div>
+
+
+</div>
+<script src="../js/profile.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const successBox = document.querySelector("div[style*='green']");
+    if (successBox) {
+      setTimeout(() => {
+        successBox.style.display = "none";
+      }, 3000);
+    }
+  });
+</script>
 
 </body>
 </html>

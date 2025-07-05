@@ -1010,3 +1010,36 @@ body {
 .swiper {
   max-width: 325px !important;
 }
+.save_profile {
+  display: flex;
+  gap: 32px;
+  label {
+    width: 300px;
+    display: flex;
+    justify-content: space-between;
+  }
+  input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.2s ease;
+    max-width: 150px;
+    @media (max-width: 768px) {
+      max-width: unset;
+    }
+  }
+}
+.save-profile-flex {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.profile_wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}

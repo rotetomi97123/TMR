@@ -17,14 +17,15 @@ $errors = [];
 $success = false;
 
 // Handle form submission
+// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Collect and sanitize inputs
     $title = trim($_POST['title'] ?? '');
     $description = trim($_POST['description'] ?? '');
-    $city_area = trim($_POST['city_area'] ?? '');
-    $property_type = $_POST['property_type'] ?? '';
-    $listing_type = trim($_POST['listing_type'] ?? '');
-    $rental_price = $_POST['rental_price'] ?? '';
+    $city = trim($_POST['city_area'] ?? '');
+    $property_type_name = $_POST['property_type'] ?? '';
+    $transaction = trim($_POST['listing_type'] ?? '');
+    $price = $_POST['rental_price'] ?? '';
     $address = trim($_POST['address'] ?? '');
     $beds = $_POST['beds'] ?? null;
     $bathroom = $_POST['bathroom'] ?? null;
@@ -32,13 +33,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Validation
     if ($title === '') $errors[] = 'Title is required.';
-    if (!in_array($property_type, ['house', 'apartment'])) $errors[] = 'Property type must be house or apartment.';
-    if (!is_numeric($rental_price) || $rental_price <= 0) $errors[] = 'Rental price must be a positive number.';
+    if (!in_array($property_type_name, ['house', 'apartment', 'studio'])) $errors[] = 'Invalid property type.';
+    if (!in_array($transaction, ['sale', 'rent'])) $errors[] = 'Invalid transaction type.';
+    if (!is_numeric($price) || $price <= 0) $errors[] = 'Price must be a positive number.';
 
-    // Handle image upload if exists
-    $imagePath = null;
+    // Upload image if available
+   $imagePath = null;
+
+// Priority 1: Uploaded file
     if (!empty($_FILES['image']['tmp_name'])) {
         $uploadsDir = '../uploads/';
+        if (!is_dir($uploadsDir)) {
+            mkdir($uploadsDir, 0777, true);
+        }
         $imageName = basename($_FILES['image']['name']);
         $targetFile = $uploadsDir . time() . '_' . $imageName;
 
@@ -48,22 +55,85 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[] = 'Image upload failed.';
         }
     }
+    // Priority 2: Image URL provided (only if no file uploaded)
+    elseif (!empty($_POST['image_url'])) {
+        $url = trim($_POST['image_url']);
+
+        // Basic validation for URL format
+        if (filter_var($url, FILTER_VALIDATE_URL)) {
+            // Optional: further validate URL points to an image (jpg, png, gif)
+            $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+            $pathInfo = pathinfo(parse_url($url, PHP_URL_PATH));
+            if (isset($pathInfo['extension']) && in_array(strtolower($pathInfo['extension']), $allowedExtensions)) {
+                $imagePath = $url;
+            } else {
+                $errors[] = 'Image URL must point to a valid image file (jpg, png, gif, webp).';
+            }
+        } else {
+            $errors[] = 'Invalid Image URL.';
+        }
+    }
 
     if (empty($errors)) {
-        $stmt = $pdo->prepare('
-            INSERT INTO listings
-            (user_id, title, description, city_area, property_type, listing_type, rental_price, address, beds, bathroom, square_meters, image_url,status)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"approved")
-        ');
-        $stmt->execute([
-            $_SESSION['user_id'], $title, $description, $city_area, $property_type,
-            $listing_type, $rental_price, $address, $beds ?: null, $bathroom ?: null, $square_meters ?: null, $imagePath
-        ]);
-        $success = true;
-      header('Location:' . $base_url .  'pages/profil.php');
+        // 1. Get property_type_id from property_types table
+        $stmt = $pdo->prepare("SELECT property_type_id FROM property_types WHERE name = ?");
+        $stmt->execute([$property_type_name]);
+        $propertyTypeRow = $stmt->fetch();
 
+        if (!$propertyTypeRow) {
+            $errors[] = 'Invalid property type selected.';
+        } else {
+            $property_type_id = $propertyTypeRow['property_type_id'];
+
+            // 2. Insert into `properties`
+            $stmt = $pdo->prepare('
+                INSERT INTO properties
+                (user_id, title, description, address, city, zip_code, transaction, price, available_from, created_at, property_type_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, NULL, NOW(), ?)
+            ');
+            $stmt->execute([
+                $_SESSION['user_id'],
+                $title,
+                $description,
+                $address,
+                $city,
+                '00000', // zip_code placeholder
+                $transaction,
+                $price,
+                $property_type_id
+            ]);
+
+            $property_id = $pdo->lastInsertId();
+
+            // 3. Insert into `property_details`
+            $stmt = $pdo->prepare('
+                INSERT INTO property_details (property_id, size, rooms, beds, bathroom, floor, furnished, heating_type, parking)
+                VALUES (?, ?, ?, ?, ?, NULL, 0, NULL, NULL)
+            ');
+            $stmt->execute([
+                $property_id,
+                $square_meters ?: 0,
+                ($beds ?? 1), // treat beds as rooms for now
+                $beds ?: 0,
+                $bathroom ?: 1
+            ]);
+
+            // 4. Insert into `property_images` if image was uploaded
+            if ($imagePath) {
+                $stmt = $pdo->prepare('
+                    INSERT INTO property_images (property_id, image_url, is_main)
+                    VALUES (?, ?, 1)
+                ');
+                $stmt->execute([$property_id, $imagePath]);
+            }
+
+            $success = true;
+            header('Location:' . $base_url . 'pages/profil.php');
+            exit;
+        }
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -112,7 +182,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label class="form-label">Image</label>
         <input type="file" name="image" class="form-control" accept="image/*" onchange="previewImage(event)" />
       </div>
-
+      <div class="mb-3">
+        <label class="form-label">Or Enter Image URL</label>
+        <input type="url" name="image_url" class="form-control" placeholder="https://example.com/image.jpg" />
+      </div>
       <div class="mb-3">
         <label class="form-label">Title</label>
         <input type="text" name="title" class="form-control" required />
