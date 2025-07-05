@@ -166,7 +166,7 @@ html {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .nav-links,
   .nav-auth {
     display: none !important;
@@ -261,8 +261,8 @@ html {
       font-weight: 400;
       margin: 0;
     }
-    h1{
-      color: $mainColor ;
+    h1 {
+      color: $mainColor;
     }
     p {
       color: $textColor;
@@ -324,6 +324,7 @@ html {
 .form-group-flex {
   display: flex;
   position: relative;
+
   @media (max-width: 1024px) {
     flex-direction: column;
     justify-content: flex-start;
@@ -682,7 +683,21 @@ body {
   max-width: 1000px;
   padding: 20px;
 }
-
+.listing-card {
+  padding: 20px;
+  margin: 20px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  @media (max-width: 1024px) {
+    padding: 8px;
+    margin: 8px;
+  }
+}
+.listing-image {
+  width: 300px;
+  height: 200px;
+  background-size: cover;
+}
 .profile-title {
   font-size: 24px;
   font-weight: bold;
@@ -1031,6 +1046,9 @@ body {
       max-width: unset;
     }
   }
+  @media (max-width: 1024px) {
+    flex-direction: column;
+  }
 }
 .save-profile-flex {
   display: flex;
@@ -1044,4 +1062,24 @@ body {
   justify-content: center;
   align-items: center;
   gap: 16px;
+}
+.required {
+  color: red !important;
+}
+.form-link {
+  font-size: 14px;
+  color: $mainColor;
+  text-decoration: none;
+  padding: 0 8px;
+}
+
+.form-link:hover {
+  text-decoration: underline;
+}
+.form-link-profile {
+  color: white;
+  background: $mainColor;
+  border-radius: 8px;
+  padding: 8px 16px;
+  text-decoration: none;
 }
