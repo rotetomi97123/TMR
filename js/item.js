@@ -8,27 +8,25 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  let priceDisplay = "";
-  if (listing.listing_type === "sale") {
-    let priceEUR =
-      Math.floor(parseFloat(listing.rental_price) / 117 / 1000) * 1000;
-    priceDisplay = priceEUR.toLocaleString("de-DE") + " €";
+  console.log(listing);
+
+  let priceHtml = "";
+  if (listing.transaction === "rent") {
+    priceHtml = `<p><strong>Price:</strong> ${listing.price} RSD / month</p>`;
   } else {
-    // Rental price formatting
-    const price = Math.ceil(parseFloat(listing.rental_price) / 117 / 50) * 50;
-    priceDisplay = `€${price}/month`;
+    priceHtml = `<p><strong>Price:</strong> ${listing.price} EUR</p>`;
   }
 
   container.innerHTML = `
     <div class="item_detail">
       <img src="${listing.image_url}" alt="Property Image" />
       <h2>${listing.title}</h2>
-      <p><strong>Location:</strong> ${listing.city_area}</p>
+      <p><strong>Location:</strong> ${listing.city}</p>
       <p><strong>Address:</strong> ${listing.address}</p>
-      <p><strong>Price:</strong> ${priceDisplay}</p>
+      ${priceHtml}
       <p><strong>Beds:</strong> ${listing.beds}</p>
       <p><strong>Bathrooms:</strong> ${listing.bathroom}</p>
-      <p><strong>Size:</strong> ${listing.square_meters} m²</p>
+      <p><strong>Size:</strong> ${listing.size} m²</p>
     </div>
   `;
 });

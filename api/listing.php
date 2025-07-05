@@ -3,111 +3,90 @@ header('Content-Type: application/json');
 require_once '../db_config.php';
 
 try {
-    // Only accept POST requests
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        echo json_encode(['success' => false, 'error' => 'Invalid request method.']);
+        exit;
+    }
+
+    $listing_type = $_POST['listing_type'] ?? '';
+    $location = trim($_POST['location'] ?? '');
+    $type = $_POST['type'] ?? '';
+    $price_input = $_POST['rental_price'] ?? '';
+    $square_meters = $_POST['square_meters'] ?? '';
+
+    // Alapvető validáció
+    if (empty($type) || empty($listing_type)) {
         echo json_encode([
             'success' => false,
-            'error' => 'Invalid request method.'
+            'error' => 'Type and listing type are required.'
         ]);
         exit;
     }
 
-    // Get POST values safely
-    $listing_type = isset($_POST['listing_type']) ? trim($_POST['listing_type']) : '';
-    $location = isset($_POST['location']) ? trim($_POST['location']) : '';
-    $type = isset($_POST['type']) ? trim($_POST['type']) : '';
-    $rental_price_input = isset($_POST['rental_price']) ? trim($_POST['rental_price']) : '';
-    $square_meters = isset($_POST['square_meters']) ? trim($_POST['square_meters']) : '';
-
-    // Validate required inputs
-    if (empty($location)) {
-        echo json_encode([
-            'success' => false,
-            'error' => 'Location is required.'
-        ]);
-        exit;
-    }
-
-    if (empty($type)) {
-        echo json_encode([
-            'success' => false,
-            'error' => 'Type is required.'
-        ]);
-        exit;
-    }
-
-    if (empty($listing_type)) {
-        echo json_encode([
-            'success' => false,
-            'error' => 'Listing type is required.'
-        ]);
-        exit;
-    }
-
-    // Exchange rate: 1 EUR = 117 RSD (adjust as needed)
-    $exchangeRate = 117;
-
-    // Convert rental_price from EUR input to RSD for filtering, applying rounding logic
-    $rental_price_rsd = '';
-    if ($rental_price_input !== '') {
-        $priceEUR = floatval($rental_price_input);
-
-        if ($listing_type === 'rent') {
-            // For rent: JS rounds UP to nearest 50 EUR
-            // So on input, round DOWN to nearest 50 EUR to invert that logic
-            $roundedEUR = floor($priceEUR / 50) * 50;
-            $rental_price_rsd = $roundedEUR * $exchangeRate;
-        } else {
-            // For sale or other types: JS rounds DOWN to nearest 1000 EUR
-            // So on input, round UP to nearest 1000 EUR to invert
-            $roundedEUR = ceil($priceEUR / 1000) * 1000;
-            $rental_price_rsd = $roundedEUR * $exchangeRate;
-        }
-    }
-
-    // Prepare base SQL query
+  
+    // SQL alap
     $sql = "
-        SELECT * FROM listings 
-        WHERE status = 'approved' 
-          AND is_visible = 1 
-          AND city_area LIKE :location 
-          AND property_type = :type
-          AND listing_type = :listing_type
+        SELECT 
+            p.property_id,
+            p.title,
+            p.description,
+            p.address,
+            p.city,
+            p.zip_code,
+            pt.name AS property_type,
+            p.transaction,
+            p.price,
+            p.available_from,
+            p.created_at,
+            COALESCE(pi.image_url, '') AS image_url,
+            pd.size AS square_meters,
+            pd.rooms,
+            pd.floor,
+            pd.furnished,
+            pd.heating_type,
+            pd.parking,
+            pd.beds,
+            pd.bathroom
+        FROM properties p
+        JOIN property_types pt ON p.property_type_id = pt.property_type_id
+        LEFT JOIN property_images pi ON p.property_id = pi.property_id AND pi.is_main = 1
+        LEFT JOIN property_details pd ON p.property_id = pd.property_id
+        WHERE pt.name = :type
+          AND p.transaction = :listing_type
     ";
 
     $params = [
-        ':location' => '%' . $location . '%',
         ':type' => $type,
         ':listing_type' => $listing_type
     ];
 
-    // Add rental_price filter if set
-    if ($rental_price_rsd !== '' && $rental_price_rsd > 0) {
-        $sql .= " AND rental_price <= :rental_price ";
-        $params[':rental_price'] = $rental_price_rsd;
+    // Csak akkor szűrjünk városra, ha nem üres
+    if (!empty($location)) {
+        $sql .= " AND p.city LIKE :location ";
+        $params[':location'] = '%' . $location . '%';
     }
-    if ($square_meters !== '' && $square_meters > 0) 
-    {
-        $sql .= " AND square_meters >= :square_meters ";
+
+    if ($price_input !== '' && $price_input > 0) {
+        $sql .= " AND p.price <= :price ";
+        $params[':price'] = $price_input;
+    }
+
+    if ($square_meters !== '' && $square_meters > 0) {
+        $sql .= " AND pd.size >= :square_meters ";
         $params[':square_meters'] = $square_meters;
     }
 
-    $sql .= " ORDER BY created_at DESC";
+    $sql .= " ORDER BY p.created_at DESC";
 
-    // Prepare and execute statement
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
+    $properties = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Fetch all matched listings
-    $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    // Return JSON response with data
     echo json_encode([
         'success' => true,
-        'data' => $listings
+        'data' => $properties
     ]);
 } catch (Exception $e) {
-    // Return error JSON on exception
     echo json_encode([
         'success' => false,
         'error' => $e->getMessage()
