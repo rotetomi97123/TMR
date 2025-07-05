@@ -35,4 +35,21 @@
       font-weight: 600;
     }
   }
+  &_flex {
+    display: flex;
+    gap: 16px;
+  }
+}
+.item-contact {
+  color: white;
+  background: $mainColor;
+  border-radius: 8px;
+  padding: 8px 16px;
+  text-decoration: none !important;
+  margin: 8px 0 !important;
+  cursor: pointer;
+  transition: 0.1s ease-in-out;
+  &:hover {
+    opacity: 80%;
+  }
 }
