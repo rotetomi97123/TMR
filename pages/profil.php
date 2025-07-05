@@ -145,6 +145,7 @@ $listings = $stmtListings->fetchAll(PDO::FETCH_ASSOC);
 
 </div>
 <script src="../js/profile.js"></script>
+<script src="../js/navbar.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const successBox = document.querySelector("div[style*='green']");

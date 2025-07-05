@@ -79,6 +79,6 @@ if (isset($_GET['error'])) {
         </form>
     </div>
 
-
+    <script src="../js/navbar.js"></script>
 </body>
 </html>

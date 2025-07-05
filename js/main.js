@@ -170,5 +170,49 @@ const observer = new IntersectionObserver((entries, observer) => {
 const target = document.getElementById('elso');
 if (target) observer.observe(target);
 
+      
+fetch(BASE_URL + "api/recent_properties.php", { method: "POST" })
+      .then((res) => res.json())
+      .then((data) => {
+        const recentProps = document.querySelector(".recent-props");
+
+        data.data.forEach((listing) => {
+          let priceHtml = "";
+          const price = Math.round(listing.price);
+
+          if (listing.transaction === "rent") {
+            priceHtml = `<p class="prop_pricee"><span>${price} €</span> / month</p>`;
+          } else {
+            priceHtml = `<p class="prop_pricee"><span>${price} €</span></p>`;
+          }
+
+          const slide = document.createElement("div");
+          slide.className = "property_carde";
+          slide.addEventListener("click", () => {
+            localStorage.setItem("selectedListing", JSON.stringify(listing));
+            window.location.href = BASE_URL + "pages/item.php";
+          });
+
+          slide.innerHTML = `
+            <img src="${listing.image_url}" alt="property_imagee" class="property_imagee" />
+            <div class="listing_contente">
+              ${priceHtml}
+              <h4>${listing.city}</h4>
+              <p>${listing.address}</p>
+              <div class="listing_content_propertiese">
+                <p><img src="${BASE_URL + 'assets/bed.svg'}" alt="bed icon" class="icone" /> ${listing.beds}</p>
+                <p><img src="${BASE_URL + 'assets/bath.svg'}" alt="bathroom icon" class="icone" /> ${listing.bathroom}</p>
+                <p><i class="bi bi-aspect-ratio"></i> ${listing.size} m²</p>
+              </div>
+            </div>
+          `;
+
+          recentProps.appendChild(slide);
+        });
+      });
 
 });
+
+
+
+  

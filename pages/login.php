@@ -53,5 +53,6 @@ if (isset($_GET['error'])) {
             <button type="submit" class="form-auth-button">Login</button>
         </form>
     </div>
+    <script src="../js/navbar.js"></script>
 </body>
 </html>

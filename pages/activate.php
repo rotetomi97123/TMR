@@ -102,5 +102,6 @@ if (!isset($_GET['token'])) {
             <a href="<?= htmlspecialchars($redirectUrl) ?>">Go to Login</a>
         </div>
     </div>
+    <script src="../js/navbar.js"></script>
 </body>
 </html>

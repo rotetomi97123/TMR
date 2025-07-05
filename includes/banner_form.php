@@ -29,7 +29,7 @@
             <div class="form-group">
               <label for="location">Location</label>
               <input type="text" name="location" class="form_input" id="location">
-              <ul id="suggestions"></ul>
+
 
             </div>
           

@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Collect and sanitize inputs
     $title = trim($_POST['title'] ?? '');
     $description = trim($_POST['description'] ?? '');
-    $city = trim($_POST['city_area'] ?? '');
+    $city = trim($_POST['city'] ?? '');
     $property_type_name = $_POST['property_type'] ?? '';
     $transaction = trim($_POST['listing_type'] ?? '');
     $price = $_POST['rental_price'] ?? '';
@@ -197,8 +197,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
 
       <div class="mb-3">
-        <label class="form-label">City Area</label>
-        <input type="text" name="city_area" class="form-control" />
+        <label class="form-label">City</label>
+        <input type="text" name="city" class="form-control" />
       </div>
 
       <div class="mb-3">
@@ -245,6 +245,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <button type="submit" class="submit-button">Submit Listing</button>
     </form>
   </div>
+
+<script src="../js/navbar.js"></script>
 
   <script>
     function previewImage(event) {

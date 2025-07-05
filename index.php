@@ -42,6 +42,7 @@
   </div>
     <!-- HERO SECTION END -->
     <?php include 'includes/newhome.php'; ?>
+    <?php include 'includes/recent_list.php'; ?>
     <?php require_once 'includes/config.php'; ?>
       <script>
       const BASE_URL = "<?= $base_url ?>";

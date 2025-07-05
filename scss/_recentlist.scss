@@ -1,0 +1,66 @@
+@use "_variables.scss" as *;
+
+.recent-props {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      padding: 2rem;
+    }
+    .property_carde {
+  display: flex;
+  flex-direction: column;
+  min-height: 420px; /* vagy amennyi a design szerint kell */
+  background: #fff;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease;
+}
+
+    .property_carde:hover {
+      transform: translateY(-5px);
+    }
+    .property_imagee {
+  width: 100%;
+  height: 200px; /* fontos! */
+  object-fit: cover;
+}
+
+    .listing_contente {
+      padding: 1rem;
+    }
+    .prop_pricee span {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: $mainColor;
+    }
+    .listing_contente h4 {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-top: 0.5rem;
+    }
+    .listing_contente p {
+      margin: 0.3rem 0;
+      color: #6c757d;
+    }
+    .listing_content_propertiese {
+      display: flex;
+    gap: 16px;
+      margin-top: 0.75rem;
+    }
+    .listing_content_propertiese p {
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+    .listing_content_propertiese .icone {
+      width: 16px;
+      height: 16px;
+      margin-right: 6px;
+    }
+    .recent-title{
+        text-align: center;
+        color: $mainColor;
+    }
+    
+    

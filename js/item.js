@@ -12,9 +12,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let priceHtml = "";
   if (listing.transaction === "rent") {
-    priceHtml = `<p><strong>Price:</strong> ${listing.price} RSD / month</p>`;
+    priceHtml = `<p><strong>Price:</strong> ${listing.price} € / month</p>`;
   } else {
-    priceHtml = `<p><strong>Price:</strong> ${listing.price} EUR</p>`;
+    priceHtml = `<p><strong>Price:</strong> ${listing.price} €</p>`;
   }
 
   container.innerHTML = `
