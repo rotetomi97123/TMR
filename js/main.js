@@ -126,4 +126,49 @@ document.addEventListener("DOMContentLoaded", function () {
         });
       });
   });
+  
+  const options = {
+  decimalPlaces: 1,
+  duration: 4
+  };
+  const options2 = {
+    duration: 5,
+  };
+  const options3 = {
+    duration: 6,
+  }
+
+const observer = new IntersectionObserver((entries, observer) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const countUp1 = new countUp.CountUp('elso', 7.5, options);
+      if (!countUp1.error) {
+        countUp1.start();
+        observer.unobserve(entry.target); // csak egyszer animáljon
+      } else {
+        console.error(countUp1.error);
+      }
+      const countUp2 = new countUp.CountUp('masodik', 4000, options2);
+      if (!countUp2.error) {
+        countUp2.start();
+        observer.unobserve(entry.target); // csak egyszer animáljon
+      } else {
+        console.error(countUp2.error);
+      }
+      const countUp3 = new countUp.CountUp('harmadik', 2500, options3);
+      if (!countUp3.error) {
+        countUp3.start();
+        observer.unobserve(entry.target); // csak egyszer animáljon
+      } else {
+        console.error(countUp3.error);
+      }
+    }
+    
+  });
+}, );
+
+const target = document.getElementById('elso');
+if (target) observer.observe(target);
+
+
 });

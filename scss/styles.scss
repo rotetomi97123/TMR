@@ -1,4 +1,4 @@
-@use "_styles2.scss" as *;
+@use "_newhome.scss" as *;
 @use "_item.scss" as *;
 @use "_variables.scss" as *;
 @use "_result.scss" as *;
@@ -261,7 +261,9 @@ html {
       font-weight: 400;
       margin: 0;
     }
-    h1,
+    h1{
+      color: $mainColor ;
+    }
     p {
       color: $textColor;
     }
@@ -409,7 +411,7 @@ input[type="text"]:focus {
   background-color: #00796b;
 }
 .hero_bg {
-  background: #e5e5e5;
+  background: #f8f8f8;
 }
 .hero_wrapper {
   display: grid;
