@@ -49,10 +49,13 @@ if (isset($_GET['error'])) {
                 <label for="password" class="form-auth-label">Password:</label>
                 <input type="password" id="password" name="password" required class="form-auth-input" placeholder="Enter your password" />
             </div>
-
+            <div class="mt-1">
+              <a href="<?= $base_url ?>auth/forgot_password.php" class="form-link">Forgot your password?</a>
+            </div>
             <button type="submit" class="form-auth-button">Login</button>
         </form>
     </div>
     <script src="../js/navbar.js"></script>
+
 </body>
 </html>

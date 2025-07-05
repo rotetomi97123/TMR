@@ -31,14 +31,17 @@ $stmtListings = $pdo->prepare("
         p.transaction, 
         p.price, 
         p.available_from,
-        p.created_at
+        p.created_at,
+        pi.image_url
     FROM properties p
     LEFT JOIN property_types pt ON p.property_type_id = pt.property_type_id
+    LEFT JOIN property_images pi ON pi.property_id = p.property_id AND pi.is_main = 1
     WHERE p.user_id = ? 
     ORDER BY p.created_at DESC
 ");
 $stmtListings->execute([$userId]);
 $listings = $stmtListings->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -98,6 +101,9 @@ $listings = $stmtListings->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <?php endif; ?>
                 </div>
+                <div class="mt-1">
+              <a href="<?= $base_url ?>auth/forgot_password.php" class="form-link-profile">Forgot your password?</a>
+            </div>
 
     </form>
   </div>

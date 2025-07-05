@@ -105,67 +105,46 @@ document.addEventListener("DOMContentLoaded", function () {
     .catch((error) => {
       console.error("Error fetching slides:", error);
     });
-  const input = document.getElementById("location");
-  const results = document.getElementById("suggestions");
 
-  input.addEventListener("input", () => {
-    const value = input.value.trim();
-    if (value.length === 0) return;
-    fetch(
-      BASE_URL + `api/search_suggestions.php?q=${encodeURIComponent(value)}`,
-      { method: "POST" }
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        results.innerHTML = "";
-        console.log(data);
-        data.forEach((item) => {
-          const li = document.createElement("li");
-          li.textContent = item;
-          results.appendChild(li);
-        });
-      });
-  });
-  
   const options = {
-  decimalPlaces: 1,
-  duration: 4
+    decimalPlaces: 1,
+    duration: 4,
   };
   const options2 = {
     duration: 5,
   };
   const options3 = {
     duration: 6,
-  }
+  };
 
-const observer = new IntersectionObserver((entries, observer) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const countUp1 = new countUp.CountUp('elso', 7.5, options);
-      if (!countUp1.error) {
-        countUp1.start();
-        observer.unobserve(entry.target); // csak egyszer animáljon
-      } else {
-        console.error(countUp1.error);
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const countUp1 = new countUp.CountUp("elso", 7.5, options);
+        if (!countUp1.error) {
+          countUp1.start();
+          observer.unobserve(entry.target); // csak egyszer animáljon
+        } else {
+          console.error(countUp1.error);
+        }
+        const countUp2 = new countUp.CountUp("masodik", 4000, options2);
+        if (!countUp2.error) {
+          countUp2.start();
+          observer.unobserve(entry.target); // csak egyszer animáljon
+        } else {
+          console.error(countUp2.error);
+        }
+        const countUp3 = new countUp.CountUp("harmadik", 2500, options3);
+        if (!countUp3.error) {
+          countUp3.start();
+          observer.unobserve(entry.target); // csak egyszer animáljon
+        } else {
+          console.error(countUp3.error);
+        }
       }
-      const countUp2 = new countUp.CountUp('masodik', 4000, options2);
-      if (!countUp2.error) {
-        countUp2.start();
-        observer.unobserve(entry.target); // csak egyszer animáljon
-      } else {
-        console.error(countUp2.error);
-      }
-      const countUp3 = new countUp.CountUp('harmadik', 2500, options3);
-      if (!countUp3.error) {
-        countUp3.start();
-        observer.unobserve(entry.target); // csak egyszer animáljon
-      } else {
-        console.error(countUp3.error);
-      }
-    }
-    
+    });
   });
-}, );
+
 
 const target = document.getElementById('elso');
 if (target) observer.observe(target);
@@ -211,6 +190,7 @@ fetch(BASE_URL + "api/recent_properties.php", { method: "POST" })
         });
       });
 
+  
 });
 
 

@@ -30,7 +30,6 @@
               <label for="location">Location</label>
               <input type="text" name="location" class="form_input" id="location">
 
-
             </div>
           
           <div class="form-group">
