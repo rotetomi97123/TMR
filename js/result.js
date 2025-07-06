@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Segédfüggvény: csak akkor ad vissza HTML-t, ha van érték
   function renderField(label, value, unit = "") {
     if (value === null || value === undefined || value === "") return "";
-    return `<p><strong>${label}:</strong> ${value}${unit}</p>`;
+    return `<p><strong>${label}</strong> ${value}${unit}</p>`;
   }
 
   // Az egyes kártyák renderelése

@@ -7,7 +7,7 @@
 <nav class="navbar">
   <div class="nav-desktop-menu">
     <div class="nav-logo">
-      <a href="<?= $base_url ?>">
+      <a href="<?= $base_url ?>index.php">
         <img src="<?= $base_url ?>assets/StanoviSrbijeLogo.png" alt="logo">
       </a>
     </div>
@@ -62,7 +62,7 @@
           <a href="<?= $base_url ?>pages/admin.php" class="nav-auth-profil-mobile" style="margin-left: 10px;">Admin</a>
         <?php endif; ?>
         <?php else: ?>
-        <a href="<?= $base_url ?>pages/login.php" class="nav-auth-login">Login</a>
+        <a href="<?= $base_url ?>pages/login.php" class="nav-auth-login-mobile">Login</a>
         <a href="<?= $base_url ?>pages/register.php" class="nav-auth-register-mobile">Sign Up</a>
       <?php endif; ?>
     </div>

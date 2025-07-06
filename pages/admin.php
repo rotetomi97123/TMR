@@ -28,11 +28,9 @@ $sql = "
         p.description,
         p.address,
         p.city,
-        p.zip_code,
         pt.name AS property_type,
         p.transaction,
         p.price,
-        p.available_from,
         p.created_at,
         pi.image_url,
         pd.size,
@@ -61,11 +59,9 @@ $sql_deact = "
         p.description,
         p.address,
         p.city,
-        p.zip_code,
         pt.name AS property_type,
         p.transaction,
         p.price,
-        p.available_from,
         p.created_at,
         pi.image_url,
         pd.size,
@@ -155,8 +151,7 @@ $deact_properties = $stmt_deact->fetchAll(PDO::FETCH_ASSOC);
 
                     <div class="more-details hidden">
                         <p class="property-transaction"><strong>Transaction:</strong> <?= htmlspecialchars($p['transaction']) ?></p>
-                        <p class="property-available"><strong>Available from:</strong> <?= htmlspecialchars($p['available_from']) ?></p>
-                        <p class="property-address"><strong>Address:</strong> <?= htmlspecialchars($p['address']) ?>, <?= htmlspecialchars($p['city']) ?> <?= htmlspecialchars($p['zip_code']) ?></p>
+                        <p class="property-address"><strong>Address:</strong> <?= htmlspecialchars($p['address']) ?>, <?= htmlspecialchars($p['city']) ?> </p>
                         <p class="property-description"><strong>Description:</strong> <?= nl2br(htmlspecialchars($p['description'])) ?></p>
 
                         <hr />
@@ -215,8 +210,7 @@ $deact_properties = $stmt_deact->fetchAll(PDO::FETCH_ASSOC);
 
                     <div class="more-details hidden">
                         <p class="property-transaction"><strong>Transaction:</strong> <?= htmlspecialchars($p['transaction']) ?></p>
-                        <p class="property-available"><strong>Available from:</strong> <?= htmlspecialchars($p['available_from']) ?></p>
-                        <p class="property-address"><strong>Address:</strong> <?= htmlspecialchars($p['address']) ?>, <?= htmlspecialchars($p['city']) ?> <?= htmlspecialchars($p['zip_code']) ?></p>
+                        <p class="property-address"><strong>Address:</strong> <?= htmlspecialchars($p['address']) ?>, <?= htmlspecialchars($p['city']) ?> </p>
                         <p class="property-description"><strong>Description:</strong> <?= nl2br(htmlspecialchars($p['description'])) ?></p>
 
                         <hr />

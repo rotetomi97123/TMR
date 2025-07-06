@@ -24,9 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return `<p><strong>${label}:</strong> ${value}</p>`;
   };
 
-  const availableFrom = listing.available_from
-    ? new Date(listing.available_from).toLocaleDateString()
-    : "";
 
   const furnishedText =
     listing.furnished === 1 || listing.furnished === "1"
@@ -57,14 +54,8 @@ document.addEventListener("DOMContentLoaded", () => {
       ${renderField("Title", listing.title)}
       ${renderField("Location", listing.city)}
       ${renderField("Address", listing.address)}
-      ${renderField("Zip Code", listing.zip_code)}
       ${renderField("Transaction", listing.transaction)}
       ${priceHtml}
-      ${
-        availableFrom
-          ? `<p><strong>Available From:</strong> ${availableFrom}</p>`
-          : ""
-      }
       ${renderField(
         "Property Type",
         listing.property_type_name || listing.property_type

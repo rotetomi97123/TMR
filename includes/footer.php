@@ -1,6 +1,6 @@
 <div class="footer">
     <div class="footer-logo">
-        <a href="<?= $base_url ?>"><img src="<?= $base_url ?>assets/StanoviSrbijeWhite.png" alt="logo"></a>
+        <a href="<?= $base_url ?>index.php"><img src="<?= $base_url ?>assets/StanoviSrbijeWhite.png" alt="logo"></a>
     </div>
     <div class="footer-links">
         <div class="footer-links-item">

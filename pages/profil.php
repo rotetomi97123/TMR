@@ -30,7 +30,6 @@ $stmtListings = $pdo->prepare("
         pt.name AS property_type,
         p.transaction, 
         p.price, 
-        p.available_from,
         p.created_at,
         pi.image_url
     FROM properties p

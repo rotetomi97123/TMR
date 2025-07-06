@@ -88,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // 2. Insert into `properties`
             $stmt = $pdo->prepare('
                 INSERT INTO properties
-                (user_id, title, description, address, city, zip_code, transaction, price, available_from, created_at, property_type_id)
+                (user_id, title, description, address, city, transaction, price, created_at, property_type_id)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, NULL, NOW(), ?)
             ');
             $stmt->execute([
@@ -97,7 +97,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $description,
                 $address,
                 $city,
-                '00000', // zip_code placeholder
                 $transaction,
                 $price,
                 $property_type_id
