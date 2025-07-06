@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Gép: 127.0.0.1
--- Létrehozás ideje: 2025. Máj 28. 14:59
--- Kiszolgáló verziója: 10.4.32-MariaDB
--- PHP verzió: 8.2.12
+-- Host: 127.0.0.1
+-- Generation Time: Jul 06, 2025 at 07:12 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,192 +18,284 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Adatbázis: `real_estate`
+-- Database: `real_estate_new`
 --
 
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `listings`
+-- Table structure for table `properties`
 --
 
-CREATE TABLE `listings` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
-  `city_area` varchar(100) DEFAULT NULL,
-  `property_type` enum('house','apartment') NOT NULL,
-  `listing_type` varchar(50) NOT NULL,
-  `rental_price` decimal(10,2) NOT NULL,
-  `image_url` varchar(255) DEFAULT NULL,
-  `status` enum('pending','approved','rejected','rented') NOT NULL DEFAULT 'pending',
-  `is_visible` tinyint(1) NOT NULL DEFAULT 1,
-  `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `address` text DEFAULT NULL,
+CREATE TABLE `properties` (
+  `property_id` int(6) NOT NULL,
+  `user_id` int(6) NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `description` text NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `city` varchar(100) NOT NULL,
+  `transaction` enum('sale','rent') NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `property_type_id` int(11) DEFAULT NULL,
+  `is_active_property` tinyint(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `properties`
+--
+
+INSERT INTO `properties` (`property_id`, `user_id`, `title`, `description`, `address`, `city`, `transaction`, `price`, `created_at`, `property_type_id`, `is_active_property`) VALUES
+(1, 1, 'Modern Apartment in Belgrade', 'Modern apartment in the center of Belgrade with a great view.', 'Knez Mihailova 12', 'Belgrade', 'sale', 75000.00, '2025-02-01 06:00:00', 1, 0),
+(2, 2, 'Family House in Novi Sad', 'Charming house with three bedrooms and a large backyard.', 'Futoška 45', 'Novi Sad', 'sale', 45000.00, '2025-02-02 07:00:00', 2, 0),
+(3, 6, 'Luxury Studio for Rent', 'Furnished studio apartment with premium amenities.', 'Bulevar Oslobođenja 1', 'Niš', 'rent', 220.00, '2025-02-03 08:00:00', 3, 1),
+(4, 7, 'Spacious Family House', 'Large house with 4 bedrooms, a basement, and a garage.', 'Zmaj Jovina 10', 'Subotica', 'sale', 55000.00, '2025-02-04 09:00:00', 2, 1),
+(5, 10, 'Central Loft Apartment', 'Industrial-style loft with high ceilings and exposed brick.', 'Cara Dušana 202', 'Zrenjanin', 'rent', 350.00, '2025-02-05 10:00:00', 1, 1),
+(6, 1, 'Studio on the Danube River', 'Small but charming studio just steps from the Danube.', 'Dunavska 15', 'Sremska Mitrovica', 'rent', 180.00, '2025-02-06 11:00:00', 3, 1),
+(7, 2, 'Townhouse in Pančevo', 'Well-maintained house with access to pool and gym.', 'Vojvode Mišića 8', 'Pančevo', 'sale', 32000.00, '2025-02-07 12:00:00', 2, 1),
+(8, 6, 'Historic House in Sombor', 'Restored historic house with modern upgrades.', 'Trg Svetog Trojstva 5', 'Sombor', 'sale', 120000.00, '2025-02-08 13:00:00', 2, 1),
+(9, 7, 'New Build Apartment in Novi Sad', 'Luxury apartment with city view and concierge service.', 'Bulevar Evrope 7', 'Novi Sad', 'rent', 280.00, '2025-02-09 14:00:00', 1, 1),
+(10, 10, 'Ground Floor Apartment with Garden', 'Apartment with private garden in a quiet neighborhood.', 'Petefi Šandora 21', 'Senta', 'rent', 190.00, '2025-02-10 15:00:00', 1, 1),
+(15, 2, 'Spacious House in Novi Sad', 'Perfect family house close to the city center.', 'Futoška 88', 'Novi Sad', 'rent', 450.00, '2025-05-25 15:54:07', 2, 1),
+(17, 14, 'Detached House in Kikinda', 'Spacious house with garden and garage in a quiet neighborhood.', 'Žarka Zrenjanina 15', 'Kikinda', 'sale', 78000.00, '2025-07-05 13:45:00', 2, 1),
+(18, 14, 'Modern Studio in Zaječar', 'Modern furnished studio ideal for singles or couples.', 'Kralja Petra 42', 'Zaječar', 'rent', 250.00, '2025-07-05 14:00:00', 3, 1),
+(19, 14, 'Family House in Čačak', 'Large family house with a spacious yard and parking.', 'Dragačeva 12', 'Čačak', 'sale', 67000.00, '2025-07-05 14:15:00', 2, 1),
+(20, 14, 'City Center Apartment in Užice', 'Fully furnished apartment close to main square and public transport.', 'Kralja Aleksandra 27', 'Užice', 'rent', 300.00, '2025-07-05 14:30:00', 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `property_details`
+--
+
+CREATE TABLE `property_details` (
+  `property_id` int(6) NOT NULL,
+  `size` int(11) NOT NULL,
+  `rooms` int(11) NOT NULL,
   `beds` int(11) DEFAULT NULL,
   `bathroom` int(11) DEFAULT NULL,
-  `square_meters` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `floor` int(11) DEFAULT NULL,
+  `furnished` tinyint(1) NOT NULL,
+  `heating_type` varchar(50) DEFAULT NULL,
+  `parking` tinyint(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- A tábla adatainak kiíratása `listings`
+-- Dumping data for table `property_details`
 --
 
-INSERT INTO `listings` (`id`, `user_id`, `title`, `description`, `city_area`, `property_type`, `listing_type`, `rental_price`, `image_url`, `status`, `is_visible`, `created_at`, `updated_at`, `address`, `beds`, `bathroom`, `square_meters`) VALUES
-(15, 2, 'Spacious house near Novi Sad', 'Perfect family house close to Novi Sad center.', 'Novi Sad', 'house', 'rent', 45000.00, 'https://i.ibb.co/4RsqvzZp/pexels-binyaminmellish-106399.jpg', 'approved', 1, '2025-05-25 19:54:07', '2025-05-28 08:31:47', 'Futoška 88,  NS', 2, 2, 120),
-(18, 2, 'Modern apartment in Subotica', 'Close to all amenities.', 'Subotica', 'house', 'rent', 30000.00, 'https://i.ibb.co/spGJ0HMK/pexels-binyaminmellish-1396122.jpg', 'approved', 1, '2025-05-25 19:54:07', '2025-05-28 08:31:47', 'Maksima Gorkog 6,  SU', 3, 2, 130),
-(25, 1, 'Modern apartment in Novi Sad', 'Bright apartment near city center, fully furnished.', 'Novi Sad', 'house', 'rent', 40000.00, 'https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg', 'approved', 1, '2025-05-20 10:15:00', '2025-05-28 08:31:47', 'Žarka Zrenjanina 15, Novi Sad', 2, 1, 70),
-(26, 2, 'Cozy house in Subotica', 'Family house with garden and garage.', 'Subotica', 'house', 'rent', 55000.00, 'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg', 'approved', 1, '2025-05-21 14:30:00', '2025-05-28 08:31:47', 'Kralja Petra 22, Subotica', 3, 2, 130),
-(27, 3, 'Studio apartment in Beograd', 'Affordable studio close to public transport.', 'Beograd', 'apartment', 'rent', 25000.00, 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80', 'approved', 1, '2025-05-22 09:45:00', '2025-05-28 08:31:47', 'Bulevar Kralja Aleksandra 75, Beograd', 1, 1, 35),
-(28, 1, 'Spacious house in Novi Sad', 'Ideal for families, large backyard.', 'Novi Sad', 'apartment', 'rent', 60000.00, 'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg', 'approved', 1, '2025-05-23 16:00:00', '2025-05-28 08:31:47', 'Rumenačka 18, Novi Sad', 4, 2, 180),
-(29, 2, 'Apartment near Subotica center', 'Close to shops and public transport.', 'Subotica', 'apartment', 'rent', 38000.00, 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg', 'approved', 1, '2025-05-24 11:20:00', '2025-05-28 08:31:47', 'Josipa Jurja Strossmayera 9, Subotica', 2, 1, 60),
-(30, 3, 'Modern apartment in Beograd', 'Luxury apartment with great city views.', 'Beograd', 'apartment', 'rent', 70000.00, 'https://images.pexels.com/photos/210617/pexels-photo-210617.jpeg', 'approved', 1, '2025-05-25 13:45:00', '2025-05-28 08:31:47', 'Savski Trg 5, Beograd', 3, 2, 95),
-(31, 1, 'Moderan stan u Beogradu', 'Stan u centru grada, blizu svih sadržaja.', 'Beograd', 'apartment', 'rent', 60000.00, 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg', 'approved', 1, '2025-05-26 14:27:55', '2025-05-28 08:31:47', 'Knez Mihailova 10, Beograd', 2, 1, 65),
-(32, 2, 'Porodična kuća u Nišu', 'Mirna lokacija, idealna za porodicu.', 'Niš', 'house', 'rent', 40000.00, 'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg', 'approved', 1, '2025-05-26 14:27:55', '2025-05-28 08:31:47', 'Bulevar Nemanjića 23, Niš', 3, 2, 110),
-(33, 3, 'Luks stan u Novom Sadu', 'Luksuzan stan u novoj zgradi.', 'Novi Sad', 'apartment', 'rent', 70000.00, 'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg', 'approved', 1, '2025-05-26 14:27:55', '2025-05-28 08:31:47', 'Bulevar Oslobođenja 45, Novi Sad', 2, 2, 75),
-(34, 1, 'Kuća sa dvorištem u Subotici', 'Prostrana kuća sa velikim dvorištem.', 'Subotica', 'house', 'rent', 35000.00, 'https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg', 'approved', 1, '2025-05-26 14:27:55', '2025-05-28 08:31:47', 'Horgoški put 12, Subotica', 4, 2, 150),
-(35, 2, 'Stan u centru Kragujevca', 'Blizina univerziteta i autobuske stanice.', 'Kragujevac', 'apartment', 'rent', 28000.00, 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg', 'approved', 1, '2025-05-26 14:27:55', '2025-05-28 08:31:47', 'Nikole Pašića 19, Kragujevac', 1, 1, 50),
-(36, 3, 'Nov stan u Zrenjaninu', 'Renoviran stan sa novim nameštajem.', 'Zrenjanin', 'apartment', 'rent', 32000.00, 'https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg', 'approved', 1, '2025-05-26 14:27:55', '2025-05-28 08:31:47', 'Cara Dušana 14, Zrenjanin', 2, 1, 60),
-(37, 1, 'Kuća u Somboru', 'Kuća sa velikim placem, pogodna za vikendicu.', 'Sombor', 'house', 'rent', 30000.00, 'https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg', 'approved', 1, '2025-05-26 14:27:55', '2025-05-28 08:31:47', 'Venac Petra Bojovića 5, Sombor', 3, 1, 140),
-(38, 2, 'Mali stan u Pančevu', 'Idealno za par ili studenta.', 'Pančevo', 'apartment', 'rent', 20000.00, 'https://images.pexels.com/photos/1571459/pexels-photo-1571459.jpeg', 'approved', 1, '2025-05-26 14:27:55', '2025-05-28 08:31:47', 'Trg Kralja Petra 8, Pančevo', 1, 1, 45),
-(39, 3, 'Kuća u Leskovcu', 'Povoljna kuća na mirnoj lokaciji.', 'Leskovac', 'house', 'rent', 25000.00, 'https://images.pexels.com/photos/323775/pexels-photo-323775.jpeg', 'approved', 1, '2025-05-26 14:27:55', '2025-05-28 08:31:47', 'Južnomoravskih brigada 3, Leskovac', 2, 1, 100),
-(40, 1, 'Stan u Užicu', 'Stan sa pogledom na reku.', 'Užice', 'apartment', 'rent', 27000.00, 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg', 'approved', 1, '2025-05-26 14:27:55', '2025-05-28 08:31:47', 'Nikole Tesle 1, Užice', 2, 1, 55),
-(41, 1, 'Elegant Villa in Novi Sad', 'Spacious villa with modern amenities in a quiet neighborhood.', 'Novi Sad', 'house', 'sale', 28000000.00, 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c', 'approved', 1, '2025-05-27 10:00:00', '2025-05-27 10:00:00', 'Fruskogorska 12, Novi Sad', 4, 3, 200),
-(42, 2, 'Modern Apartment in Belgrade', 'Contemporary apartment located in the heart of the city.', 'Beograd', 'apartment', 'sale', 12500000.00, 'https://images.pexels.com/photos/259950/pexels-photo-259950.jpeg', 'approved', 1, '2025-05-27 11:00:00', '2025-05-28 10:07:43', 'Knez Mihailova 20, Belgrade', 2, 1, 85),
-(43, 3, 'Cozy House in Niš', 'Charming house with a beautiful garden, perfect for families.', 'Niš', 'house', 'sale', 14500000.00, 'https://images.unsplash.com/photo-1572120360610-d971b9b6399e', 'approved', 1, '2025-05-27 12:00:00', '2025-05-27 12:00:00', 'Bulevar Nemanjića 45, Niš', 3, 2, 120),
-(44, 1, 'Luxury Penthouse in Subotica', 'Penthouse offering panoramic views and top-notch facilities.', 'Subotica', 'apartment', 'sale', 21500000.00, 'https://images.pexels.com/photos/439391/pexels-photo-439391.jpeg', 'approved', 1, '2025-05-27 13:00:00', '2025-05-27 13:00:00', 'Korzo 5, Subotica', 3, 2, 150),
-(45, 2, 'Family Home in Kragujevac', 'Spacious family home with a large backyard and garage.', 'Kragujevac', 'house', 'sale', 18000000.00, 'https://images.unsplash.com/photo-1568605114967-8130f3a36994', 'approved', 1, '2025-05-27 14:00:00', '2025-05-27 14:00:00', 'Svetozara Markovića 10, Kragujevac', 4, 2, 180),
-(46, 3, 'Downtown Apartment in Pančevo', 'Modern apartment close to all amenities and public transport.', 'Pančevo', 'apartment', 'sale', 9000000.00, 'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg', 'approved', 1, '2025-05-27 15:00:00', '2025-05-27 15:00:00', 'Trg Kralja Petra 8, Pančevo', 2, 1, 90),
-(47, 1, 'Rustic Cottage in Sombor', 'A peaceful retreat surrounded by nature, ideal for relaxation.', 'Sombor', 'house', 'sale', 9500000.00, 'https://images.unsplash.com/photo-1600585154205-2c2b6a4f7c5e', 'approved', 1, '2025-05-27 16:00:00', '2025-05-27 16:00:00', 'Venac Petra Bojovića 5, Sombor', 3, 1, 110),
-(48, 2, 'Stylish Loft in Zrenjanin', 'Loft apartment with modern design and open space concept.', 'Zrenjanin', 'apartment', 'sale', 10200000.00, 'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg', 'approved', 1, '2025-05-27 17:00:00', '2025-05-27 17:00:00', 'Cara Dušana 14, Zrenjanin', 2, 1, 95),
-(49, 3, 'Traditional Home in Užice', 'Well-maintained traditional house with a spacious yard.', 'Užice', 'house', 'sale', 13000000.00, 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c', 'approved', 1, '2025-05-27 18:00:00', '2025-05-27 18:00:00', 'Nikole Tesle 1, Užice', 3, 2, 130),
-(50, 1, 'Compact Studio in Leskovac', 'Affordable studio apartment, perfect for singles or students.', 'Leskovac', 'apartment', 'sale', 5700000.00, 'https://images.pexels.com/photos/1571459/pexels-photo-1571459.jpeg', 'approved', 1, '2025-05-27 19:00:00', '2025-05-27 19:00:00', 'Južnomoravskih brigada 3, Leskovac', 1, 1, 45),
-(51, 2, 'Duplex in Novi Beograd', 'Spacious duplex apartment near schools and shopping centers.', 'Beograd', 'apartment', 'sale', 15500000.00, 'https://images.unsplash.com/photo-1600585154095-7cde3c1f8b6e', 'approved', 1, '2025-05-28 10:00:00', '2025-05-28 10:07:43', 'Jurija Gagarina 76, Belgrade', 3, 2, 105),
-(52, 1, 'House with Yard in Zemun', 'Renovated house with a private backyard and garage.', 'Beograd', 'house', 'sale', 19800000.00, 'https://images.pexels.com/photos/37347/house-dusk-evening-modern.jpg', 'approved', 1, '2025-05-28 10:10:00', '2025-05-28 10:07:43', 'Glavna 11, Zemun', 4, 2, 160),
-(53, 3, 'Central Apartment in Čačak', 'Sunny apartment close to the city center, newly refurbished.', 'Čačak', 'apartment', 'sale', 8800000.00, 'https://images.pexels.com/photos/2089698/pexels-photo-2089698.jpeg', 'approved', 1, '2025-05-28 10:20:00', '2025-05-28 10:20:00', 'Gospodar Jovanova 7, Čačak', 2, 1, 75),
-(54, 2, 'Townhouse in Jagodina', 'Well-maintained townhouse with attic space and garden.', 'Jagodina', 'house', 'sale', 12100000.00, 'https://images.unsplash.com/photo-1599423300746-b62533397364', 'approved', 1, '2025-05-28 10:30:00', '2025-05-28 10:30:00', 'Braće Dirak 4, Jagodina', 3, 2, 140),
-(55, 1, 'Modern Flat in Novi Pazar', 'Newly built apartment with a balcony and private parking.', 'Novi Pazar', 'apartment', 'sale', 9300000.00, 'https://images.pexels.com/photos/1029599/pexels-photo-1029599.jpeg', 'approved', 1, '2025-05-28 10:40:00', '2025-05-28 10:40:00', 'Generala Živkovića 23, Novi Pazar', 2, 1, 78),
-(56, 2, 'Family House in Vranje', 'Large family house with basement and green space.', 'Vranje', 'house', 'sale', 14200000.00, 'https://images.unsplash.com/photo-1560185127-6ed189bf08c5', 'approved', 1, '2025-05-28 10:50:00', '2025-05-28 10:50:00', 'Partizanska 9, Vranje', 4, 2, 170),
-(57, 3, 'Compact Flat in Valjevo', 'Ideal for couples or singles, close to local amenities.', 'Valjevo', 'apartment', 'sale', 6100000.00, 'https://images.pexels.com/photos/1571457/pexels-photo-1571457.jpeg', 'approved', 1, '2025-05-28 11:00:00', '2025-05-28 11:00:00', 'Karađorđeva 18, Valjevo', 1, 1, 50),
-(58, 1, 'House Near Danube in Smederevo', 'Beautiful location, near river walk and schools.', 'Smederevo', 'house', 'sale', 11700000.00, 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914', 'approved', 1, '2025-05-28 11:10:00', '2025-05-28 11:10:00', 'Dunavska 3, Smederevo', 3, 2, 135),
-(59, 2, 'Luxury Apartment in Vršac', 'Top-floor apartment with two terraces and a great view.', 'Vršac', 'apartment', 'sale', 14300000.00, 'https://images.pexels.com/photos/1571463/pexels-photo-1571463.jpeg', 'approved', 1, '2025-05-28 11:20:00', '2025-05-28 11:20:00', 'Žarka Zrenjanina 12, Vršac', 3, 2, 100),
-(60, 3, 'Affordable Home in Požarevac', 'Budget-friendly house needing some renovation.', 'Požarevac', 'house', 'sale', 7900000.00, 'https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg', 'approved', 1, '2025-05-28 11:30:00', '2025-05-28 11:30:00', 'Nemanjina 6, Požarevac', 2, 1, 95);
+INSERT INTO `property_details` (`property_id`, `size`, `rooms`, `beds`, `bathroom`, `floor`, `furnished`, `heating_type`, `parking`) VALUES
+(15, 120, 2, 2, 1, NULL, 1, NULL, NULL),
+(1, 850, 2, 2, 1, 12, 1, 'central', 1),
+(2, 1800, 3, 3, 2, NULL, 0, 'forced air', 1),
+(3, 550, 1, 1, 1, 5, 1, 'electric', 0),
+(4, 2400, 4, 4, 2, NULL, 0, 'central', 1),
+(5, 1100, 2, 2, 1, 8, 1, 'central', 1),
+(6, 450, 1, 1, 1, 2, 1, 'electric', 0),
+(7, 1600, 3, 3, 2, NULL, 0, 'forced air', 1),
+(8, 2800, 5, 5, 3, NULL, 0, 'radiator', 1),
+(9, 950, 2, 2, 1, 22, 1, 'central', 1),
+(10, 750, 1, 1, 1, 1, 0, 'electric', 0),
+(17, 2000, 5, 4, 2, NULL, 0, 'gas', 1),
+(18, 450, 1, 1, 1, 3, 1, 'electric', 0),
+(19, 1800, 4, 3, 2, NULL, 0, 'central', 1),
+(20, 700, 2, 2, 1, 5, 1, 'central', 0);
 
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `rentals`
+-- Table structure for table `property_images`
 --
 
-CREATE TABLE `rentals` (
-  `id` int(11) NOT NULL,
-  `listing_id` int(11) NOT NULL,
-  `renter_id` int(11) NOT NULL,
-  `rental_start` date NOT NULL,
-  `rental_end` date NOT NULL,
-  `created_at` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE `property_images` (
+  `image_id` int(6) NOT NULL,
+  `property_id` int(6) NOT NULL,
+  `image_url` varchar(255) DEFAULT NULL,
+  `is_main` tinyint(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `property_images`
+--
+
+INSERT INTO `property_images` (`image_id`, `property_id`, `image_url`, `is_main`) VALUES
+(1, 1, 'https://i.ibb.co/4RsqvzZp/pexels-binyaminmellish-106399.jpg', 1),
+(2, 1, 'https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg', 0),
+(3, 2, 'https://i.ibb.co/spGJ0HMK/pexels-binyaminmellish-1396122.jpg', 1),
+(4, 2, 'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg', 0),
+(5, 3, 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg', 1),
+(6, 3, 'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg', 0),
+(7, 4, 'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg', 1),
+(8, 4, 'https://images.pexels.com/photos/210617/pexels-photo-210617.jpeg', 0),
+(9, 5, 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c', 1),
+(10, 5, 'https://images.pexels.com/photos/259950/pexels-photo-259950.jpeg', 0),
+(11, 6, 'https://images.unsplash.com/photo-1570129477492-45c003edd2be', 1),
+(12, 6, 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg', 0),
+(13, 7, 'https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg', 1),
+(14, 7, 'https://images.pexels.com/photos/323775/pexels-photo-323775.jpeg', 0),
+(16, 8, 'https://images.pexels.com/photos/439391/pexels-photo-439391.jpeg', 1),
+(17, 9, 'https://images.unsplash.com/photo-1568605114967-8130f3a36994', 1),
+(18, 9, 'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg', 0),
+(19, 10, 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg', 1),
+(20, 15, 'https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg', 1),
+(23, 17, 'https://images.pexels.com/photos/1643384/pexels-photo-1643384.jpeg', 1),
+(24, 17, 'https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg', 0),
+(25, 18, 'https://images.unsplash.com/photo-1502673530728-f79b4cab31b1', 1),
+(26, 18, 'https://images.unsplash.com/photo-1494526585095-c41746248156', 0),
+(27, 19, 'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg', 1),
+(28, 19, 'https://images.pexels.com/photos/210617/pexels-photo-210617.jpeg', 0),
+(29, 20, 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914', 1);
 
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `users`
+-- Table structure for table `property_types`
+--
+
+CREATE TABLE `property_types` (
+  `property_type_id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `property_types`
+--
+
+INSERT INTO `property_types` (`property_type_id`, `name`) VALUES
+(1, 'apartment'),
+(2, 'house'),
+(3, 'studio');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password_hash` varchar(255) NOT NULL,
-  `first_name` varchar(50) DEFAULT NULL,
-  `last_name` varchar(50) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL,
   `role` enum('guest','user','admin') NOT NULL DEFAULT 'user',
+  `created_at` datetime DEFAULT current_timestamp(),
+  `first_name` varchar(50) DEFAULT NULL,
+  `last_name` varchar(50) DEFAULT NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT 0,
   `is_blocked` tinyint(1) NOT NULL DEFAULT 0,
   `activation_token` varchar(255) DEFAULT NULL,
   `reset_token` varchar(255) DEFAULT NULL,
   `token_expiry` datetime DEFAULT NULL,
-  `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- A tábla adatainak kiíratása `users`
+-- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `email`, `password_hash`, `first_name`, `last_name`, `phone`, `role`, `is_active`, `is_blocked`, `activation_token`, `reset_token`, `token_expiry`, `created_at`, `updated_at`) VALUES
-(1, 'john_doe', 'john@example.com', 'hashedpassword1', 'John', 'Doe', '123456789', 'user', 1, 0, NULL, NULL, NULL, '2025-05-21 12:28:19', '2025-05-21 12:28:19'),
-(2, 'jane_smith', 'jane@example.com', 'hashedpassword2', 'Jane', 'Smith', '987654321', 'user', 1, 0, NULL, NULL, NULL, '2025-05-21 12:28:19', '2025-05-21 12:28:19'),
-(3, 'admin1', 'admin@example.com', 'hashedadmin', 'Admin', 'User', '555000111', 'admin', 1, 0, NULL, NULL, NULL, '2025-05-21 12:28:19', '2025-05-21 12:28:19');
+INSERT INTO `users` (`user_id`, `username`, `email`, `password_hash`, `phone`, `role`, `created_at`, `first_name`, `last_name`, `is_active`, `is_blocked`, `activation_token`, `reset_token`, `token_expiry`, `updated_at`) VALUES
+(1, 'john_doe', 'john@example.com', 'hashedpassword1', '123456789', 'user', '2025-05-21 12:28:19', NULL, NULL, 0, 0, NULL, NULL, NULL, '2025-07-06 16:31:11'),
+(2, 'jane_smith', 'jane@example.com', 'hashedpassword2', '987654321', 'user', '2025-05-21 12:28:19', NULL, NULL, 0, 0, NULL, NULL, NULL, '2025-07-05 09:55:54'),
+(3, 'admin1', 'admin@example.com', 'hashedadmin', '555000111', 'admin', '2025-05-21 12:28:19', NULL, NULL, 1, 0, NULL, NULL, NULL, '2025-07-05 14:41:18'),
+(4, 'sarah_williams', 'sarah@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '555-0104', 'user', '2025-01-18 11:00:00', NULL, NULL, 0, 0, NULL, NULL, NULL, '2025-07-05 09:55:54'),
+(5, 'david_brown', 'david@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '555-0105', 'admin', '2025-01-19 12:00:00', NULL, NULL, 0, 0, NULL, NULL, NULL, '2025-07-05 09:55:54'),
+(6, 'emily_davis', 'emily@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '555-0106', 'user', '2025-01-20 13:00:00', NULL, NULL, 0, 0, NULL, NULL, NULL, '2025-07-05 09:55:54'),
+(7, 'robert_miller', 'robert@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '555-0107', 'user', '2025-01-21 14:00:00', NULL, NULL, 0, 0, NULL, NULL, NULL, '2025-07-05 09:55:54'),
+(8, 'lisa_wilson', 'lisa@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '555-0108', 'user', '2025-01-22 15:00:00', NULL, NULL, 0, 0, NULL, NULL, NULL, '2025-07-05 09:55:54'),
+(9, 'thomas_moore', 'thomas@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '555-0109', 'user', '2025-01-23 16:00:00', NULL, NULL, 0, 0, NULL, NULL, NULL, '2025-07-05 09:55:54'),
+(10, 'jennifer_taylor', 'jennifer@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '555-0110', 'user', '2025-01-24 17:00:00', NULL, NULL, 0, 0, NULL, NULL, NULL, '2025-07-05 09:55:54'),
+(14, 'rotetomi97123', 'tot.tamas04@gmail.com', '$2y$10$W4ctwmhScPj.3WQyARu2EewgVzSZmLo1a0PFHOWyJ33vvw1BU4Tq6', '06216216', 'admin', '2025-07-05 14:56:21', 'Tamas', 'Tothh', 1, 0, NULL, NULL, NULL, '2025-07-06 13:24:13'),
+(15, 'brasnyokrisztian', 'krisztianbrasnyo@gmail.com', '$2y$10$dUzL7CjkKm6pRVtWcC4OFOvqXGXXVv5.gjQnO/pwIpmgVH.MY2UxK', '1234567890', 'admin', '2025-07-05 15:59:17', 'Krisztian', 'Brasnyo', 1, 0, NULL, NULL, NULL, '2025-07-06 16:31:17');
 
 --
--- Indexek a kiírt táblákhoz
+-- Indexes for dumped tables
 --
 
 --
--- A tábla indexei `listings`
+-- Indexes for table `properties`
 --
-ALTER TABLE `listings`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
+ALTER TABLE `properties`
+  ADD PRIMARY KEY (`property_id`),
+  ADD KEY `fk_user_id` (`user_id`),
+  ADD KEY `fk_property_type_id` (`property_type_id`);
 
 --
--- A tábla indexei `rentals`
+-- Indexes for table `property_details`
 --
-ALTER TABLE `rentals`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `listing_id` (`listing_id`),
-  ADD KEY `renter_id` (`renter_id`);
+ALTER TABLE `property_details`
+  ADD KEY `property_id` (`property_id`);
 
 --
--- A tábla indexei `users`
+-- Indexes for table `property_images`
+--
+ALTER TABLE `property_images`
+  ADD PRIMARY KEY (`image_id`),
+  ADD KEY `property_id` (`property_id`);
+
+--
+-- Indexes for table `property_types`
+--
+ALTER TABLE `property_types`
+  ADD PRIMARY KEY (`property_type_id`),
+  ADD UNIQUE KEY `name` (`name`);
+
+--
+-- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`),
-  ADD UNIQUE KEY `email` (`email`);
+  ADD PRIMARY KEY (`user_id`);
 
 --
--- A kiírt táblák AUTO_INCREMENT értéke
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT a táblához `listings`
+-- AUTO_INCREMENT for table `properties`
 --
-ALTER TABLE `listings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+ALTER TABLE `properties`
+  MODIFY `property_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
--- AUTO_INCREMENT a táblához `rentals`
+-- AUTO_INCREMENT for table `property_images`
 --
-ALTER TABLE `rentals`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `property_images`
+  MODIFY `image_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
--- AUTO_INCREMENT a táblához `users`
+-- AUTO_INCREMENT for table `property_types`
+--
+ALTER TABLE `property_types`
+  MODIFY `property_type_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
--- Megkötések a kiírt táblákhoz
+-- Constraints for dumped tables
 --
 
 --
--- Megkötések a táblához `listings`
+-- Constraints for table `properties`
 --
-ALTER TABLE `listings`
-  ADD CONSTRAINT `listings_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+ALTER TABLE `properties`
+  ADD CONSTRAINT `fk_property_type_id` FOREIGN KEY (`property_type_id`) REFERENCES `property_types` (`property_type_id`),
+  ADD CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
 
 --
--- Megkötések a táblához `rentals`
+-- Constraints for table `property_details`
 --
-ALTER TABLE `rentals`
-  ADD CONSTRAINT `rentals_ibfk_1` FOREIGN KEY (`listing_id`) REFERENCES `listings` (`id`),
-  ADD CONSTRAINT `rentals_ibfk_2` FOREIGN KEY (`renter_id`) REFERENCES `users` (`id`);
+ALTER TABLE `property_details`
+  ADD CONSTRAINT `property_details_ibfk_1` FOREIGN KEY (`property_id`) REFERENCES `properties` (`property_id`);
+
+--
+-- Constraints for table `property_images`
+--
+ALTER TABLE `property_images`
+  ADD CONSTRAINT `property_images_ibfk_1` FOREIGN KEY (`property_id`) REFERENCES `properties` (`property_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
