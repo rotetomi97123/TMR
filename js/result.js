@@ -3,48 +3,66 @@ document.addEventListener("DOMContentLoaded", () => {
   const typeSelect = document.getElementById("type");
   const searchForm = document.getElementById("searchForm");
 
+  // Segédfüggvény: csak akkor ad vissza HTML-t, ha van érték
+  function renderField(label, value, unit = "") {
+    if (value === null || value === undefined || value === "") return "";
+    return `<p><strong>${label}:</strong> ${value}${unit}</p>`;
+  }
+
+  // Az egyes kártyák renderelése
   function renderListings(listings) {
     if (!listings.length) {
       resultsContainer.innerText = "No listings found.";
       return;
     }
 
-    resultsContainer.innerHTML = ""; // clear old results
+    resultsContainer.innerHTML = ""; // töröljük az előzőeket
 
     listings.forEach((listing) => {
       const card = document.createElement("div");
       card.className = "listing property_card";
-      // CALCULATE PRICE
-      let priceHtml = "";
-      const price = Math.round(listing.price);
 
+      // Ár kerekítése és megjelenítése
+      const price = Math.round(listing.price);
+      let priceHtml = "";
       if (listing.transaction === "rent") {
-        priceHtml = `<p class="prop_price"><span>${price} €</span> / month</p></p>`;
+        priceHtml = price
+          ? `<p class="prop_price"><span>${price} €</span> / month</p>`
+          : "";
       } else {
-        priceHtml = `<p class="prop_price"><span>${price} €</span></p>`;
+        priceHtml = price
+          ? `<p class="prop_price"><span>${price} €</span></p>`
+          : "";
       }
 
       const image = listing.image_url || "../assets/placeholder.jpg";
 
+      // Kártya belső HTML összeállítása, csak nem üres mezők jelennek meg
       card.innerHTML = `
-  <img src="${image}" alt="property image" class="prop_image" />
-  <div class="prop_content">
-    ${priceHtml}
-    <h4 class="prop_city">${listing.city}</h4>
-    <p class="prop_address">${listing.address}</p>
-    <div class="prop_details">
-      <p><img src="../assets/bed.svg" class="prop_icon" /> ${
-        listing.beds ?? "-"
-      } </p>
-      <p><img src="../assets/bath.svg" class="prop_icon" /> ${
-        listing.bathroom ?? "-"
-      } </p>
-      <p><i class="bi bi-aspect-ratio"></i> ${
-        listing.square_meters ?? "-"
-      } m²</p>
-    </div>
-  </div>
-`;
+        <img src="${image}" alt="property image" class="prop_image" />
+        <div class="prop_content">
+          ${priceHtml}
+          ${renderField("City", listing.city)}
+          ${renderField("Address", listing.address)}
+          <div class="prop_details">
+            ${renderField(
+              "",
+              listing.beds ?? "",
+              ` <img src="../assets/bed.svg" class="prop_icon" />`
+            )}
+            ${renderField(
+              "",
+              listing.bathroom ?? "",
+              ` <img src="../assets/bath.svg" class="prop_icon" />`
+            )}
+            ${renderField(
+              "",
+              listing.square_meters ?? "",
+              ` m² <i class="bi bi-aspect-ratio"></i>`
+            )}
+          </div>
+        </div>
+      `;
 
       card.addEventListener("click", () => {
         localStorage.setItem("selectedListing", JSON.stringify(listing));
@@ -55,6 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Az API hívás, keresés
   function fetchListings(city, type, transaction, price, square_meters) {
     resultsContainer.innerText = "Loading...";
     fetch("../api/listing.php", {
@@ -81,23 +100,25 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   }
 
-  function loadCities() {
+  // Típusok betöltése a selectbe
+  function loadTypes() {
     return fetch("../api/get_type.php")
       .then((res) => res.json())
-      .then((cities) => {
+      .then((types) => {
         typeSelect.innerHTML = "";
-        cities.forEach((city) => {
+        types.forEach((type) => {
           const option = document.createElement("option");
-          option.value = city;
-          option.textContent = city.charAt(0).toUpperCase() + city.slice(1);
+          option.value = type;
+          option.textContent = type.charAt(0).toUpperCase() + type.slice(1);
           typeSelect.appendChild(option);
         });
       });
   }
 
+  // Form előtöltése url paraméterek alapján
   function prefillForm({ location, type, listing_type }) {
-    typeSelect.value = location;
-    document.getElementById("type").value = type;
+    document.getElementById("location").value = location || "";
+    typeSelect.value = type || "";
 
     const radio = document.querySelector(
       `input[name="listing_type"][value="${listing_type}"]`
@@ -113,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const rental_price = params.get("rental_price") || "";
     const square_meters = params.get("square_meters") || "";
 
-    await loadCities();
+    await loadTypes();
     prefillForm({ location, type, listing_type });
     fetchListings(location, type, listing_type, rental_price, square_meters);
   }
@@ -124,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
 
     const type = typeSelect.value.trim();
-    const location = document.getElementById("location").value;
+    const location = document.getElementById("location").value.trim();
     const listingTypeRadio = document.querySelector(
       'input[name="listing_type"]:checked'
     );
@@ -134,7 +155,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const square_meters =
       document.getElementById("square_meters")?.value.trim() || "";
 
-    if (!listing_type) return console.warn("Select listing type.");
+    if (!listing_type) {
+      console.warn("Select listing type.");
+      return;
+    }
 
     fetchListings(location, type, listing_type, rental_price, square_meters);
   });

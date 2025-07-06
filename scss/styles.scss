@@ -61,7 +61,6 @@ html {
   a {
     text-decoration: none;
   }
-
 }
 
 .nav-toggle {
@@ -176,7 +175,7 @@ html {
   }
 }
 .result_bg {
-  background: #e5e5e5;
+  background: #f8f8f8;
   height: 100%;
 }
 .result_wrapper {
@@ -1063,4 +1062,18 @@ body {
   border-radius: 8px;
   padding: 8px 16px;
   text-decoration: none;
+}
+.recent-text-flex {
+  max-width: 1024px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.nav-auth-logout-mobile,
+.nav-auth-profil-mobile {
+  padding: 8px 16px !important;
+}
+.nav-auth-profil-mobile {
+  color: white !important;
 }

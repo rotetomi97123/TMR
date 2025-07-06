@@ -175,76 +175,140 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <div class="alert alert-success">Listing created successfully!</div>
     <?php endif; ?>
 
-    <form action="" method="POST" enctype="multipart/form-data">
-      <img id="imagePreview" class="preview-img" />
+<form id="property-form" action="" method="POST" enctype="multipart/form-data">
+  <img id="imagePreview" class="preview-img" />
 
-      <div class="mb-3">
-        <label class="form-label">Image</label>
-        <input type="file" name="image" class="form-control" accept="image/*" onchange="previewImage(event)" />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Or Enter Image URL</label>
-        <input type="url" name="image_url" class="form-control" placeholder="https://example.com/image.jpg" />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Title</label>
-        <input type="text" name="title" class="form-control" required />
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Description</label>
-        <textarea name="description" class="form-control" rows="4" required></textarea>
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">City</label>
-        <input type="text" name="city" class="form-control" />
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Property Type</label>
-        <select name="property_type" class="form-control" required>
-          <option value="apartment">Apartment</option>
-          <option value="house">House</option>
-        </select>
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Listing Type</label>
-        <select name="listing_type" class="form-control" required>
-          <option value="rent">Rent</option>
-          <option value="sale">Sale</option>
-        </select>
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Price</label>
-        <input type="number" name="rental_price" step="0.01" class="form-control" required />
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Address</label>
-        <input type="text" name="address" class="form-control" />
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Beds</label>
-        <input type="number" name="beds" class="form-control" />
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Bathroom</label>
-        <input type="number" name="bathroom" class="form-control" />
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Square Meters</label>
-        <input type="number" name="square_meters" class="form-control" />
-      </div>
-      <a href="<?= $base_url ?>pages/profil.php" class="submit-button">Cancel</a>
-      <button type="submit" class="submit-button">Submit Listing</button>
-    </form>
+  <div class="mb-3">
+    <label class="form-label" for="image">Image</label>
+    <input type="file" id="image" name="image" class="form-control" accept="image/*" onchange="previewImage(event)" />
+    <div id="error_image" class="error-message"></div>
   </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="image_url">Or Enter Image URL</label>
+    <input type="url" id="image_url" name="image_url" class="form-control" placeholder="https://example.com/image.jpg" />
+    <div id="error_image_url" class="error-message"></div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="title">Title</label>
+    <input type="text" id="title" name="title" class="form-control" />
+    <div id="error_title" class="error-message"></div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="description">Description</label>
+    <textarea id="description" name="description" class="form-control" rows="4"></textarea>
+    <div id="error_description" class="error-message"></div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="city">City</label>
+    <input type="text" id="city" name="city" class="form-control" />
+    <div id="error_city" class="error-message"></div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="property_type">Property Type</label>
+    <select id="property_type" name="property_type" class="form-control">
+      <option value="">-- Select --</option>
+      <option value="apartment">Apartment</option>
+      <option value="house">House</option>
+      <option value="studio">Studio</option>
+
+    </select>
+    <div id="error_property_type" class="error-message"></div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="listing_type">Listing Type</label>
+    <select id="listing_type" name="listing_type" class="form-control">
+      <option value="">-- Select --</option>
+      <option value="rent">Rent</option>
+      <option value="sale">Sale</option>
+    </select>
+    <div id="error_listing_type" class="error-message"></div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="rental_price">Price</label>
+    <input type="number" id="rental_price" name="rental_price" step="0.01" class="form-control" />
+    <div id="error_rental_price" class="error-message"></div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="address">Address</label>
+    <input type="text" id="address" name="address" class="form-control" />
+    <div id="error_address" class="error-message"></div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="beds">Beds</label>
+    <input type="number" id="beds" name="beds" class="form-control" />
+    <div id="error_beds" class="error-message"></div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="bathroom">Bathroom</label>
+    <input type="number" id="bathroom" name="bathroom" class="form-control" />
+    <div id="error_bathroom" class="error-message"></div>
+  </div>
+
+
+  <div class="mb-3">
+    <label class="form-label" for="rooms">Rooms</label>
+    <input type="number" id="rooms" name="rooms" class="form-control" />
+    <div id="error_rooms" class="error-message"></div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="floor">Floor</label>
+    <input type="number" id="floor" name="floor" class="form-control" />
+    <div id="error_floor" class="error-message"></div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="furnished">Furnished</label>
+    <select name="furnished" id="furnished">
+      <option value="">Choose</option>
+      <option value="0">Not furnished</option>
+      <option value="1">Furnished</option>
+    </select>
+    <div id="error_furnished" class="error-message"></div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="heating_type">Heating type</label>
+    <select name="heating_type" id="heating_type">
+      <option value="">Choose</option>
+      <option value="central">Central</option>
+      <option value="forced_air">Forced air</option>
+      <option value="electric">Electric</option>
+      <option value="radiator">Radiator</option>
+    </select>
+    <div id="error_heating_type" class="error-message"></div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="parking">Parking</label>
+    <select name="parking" id="parking">
+      <option value="">Choose</option>
+      <option value="0">Not have parking place</option>
+      <option value="1">Parking place</option>
+    </select>
+    <div id="error_parking" class="error-message"></div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="square_meters">Square Meters</label>
+    <input type="number" id="square_meters" name="square_meters" class="form-control" />
+    <div id="error_square_meters" class="error-message"></div>
+  </div>
+
+  <a href="<?= $base_url ?>pages/profil.php" class="submit-button">Cancel</a>
+  <button type="submit" class="submit-button">Submit Listing</button>
+</form>
+
 
 <script src="../js/navbar.js"></script>
 
@@ -262,5 +326,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       }
     }
   </script>
+  <script src="../js/create-listing.js"></script>
 </body>
 </html>

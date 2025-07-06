@@ -25,35 +25,39 @@ try {
 
   
     // SQL alap
-    $sql = "
-        SELECT 
-            p.property_id,
-            p.title,
-            p.description,
-            p.address,
-            p.city,
-            p.zip_code,
-            pt.name AS property_type,
-            p.transaction,
-            p.price,
-            p.available_from,
-            p.created_at,
-            COALESCE(pi.image_url, '') AS image_url,
-            pd.size AS square_meters,
-            pd.rooms,
-            pd.floor,
-            pd.furnished,
-            pd.heating_type,
-            pd.parking,
-            pd.beds,
-            pd.bathroom
-        FROM properties p
-        JOIN property_types pt ON p.property_type_id = pt.property_type_id
-        LEFT JOIN property_images pi ON p.property_id = pi.property_id AND pi.is_main = 1
-        LEFT JOIN property_details pd ON p.property_id = pd.property_id
-        WHERE pt.name = :type
-          AND p.transaction = :listing_type
-    ";
+   $sql = "
+    SELECT 
+        p.property_id,
+        p.title,
+        p.description,
+        p.address,
+        p.city,
+        p.zip_code,
+        pt.name AS property_type,
+        p.transaction,
+        p.price,
+        p.available_from,
+        p.created_at,
+        COALESCE(pi.image_url, '') AS image_url,
+        pd.size AS square_meters,
+        pd.rooms,
+        pd.floor,
+        pd.furnished,
+        pd.heating_type,
+        pd.parking,
+        pd.beds,
+        pd.bathroom,
+        u.email,
+        u.phone
+    FROM properties p
+    JOIN property_types pt ON p.property_type_id = pt.property_type_id
+    LEFT JOIN property_images pi ON p.property_id = pi.property_id AND pi.is_main = 1
+    LEFT JOIN property_details pd ON p.property_id = pd.property_id
+    JOIN users u ON p.user_id = u.user_id
+    WHERE pt.name = :type
+      AND p.transaction = :listing_type
+";
+
 
     $params = [
         ':type' => $type,
