@@ -126,12 +126,14 @@ $deact_properties = $stmt_deact->fetchAll(PDO::FETCH_ASSOC);
     <div class="container my-4 admin_wrapper">
         <div class="admin_text ">
             <h1 class="mb-4">Property Management</h1>
-            <button id="toggle-properties-btn" class="admin_show_prop">
-                Show Active Properties
-            </button>
-            <button class="admin-manage-btn" onclick="location.href='../pages/admin_users.php'">
-                Manage Users
-            </button>
+            <div class="d-flex align-items-center gap-2">
+                <button id="toggle-properties-btn" class="admin_show_prop">
+                    Show Active Properties
+                </button>
+                <button class="admin-manage-btn" onclick="location.href='../pages/admin_users.php'">
+                    Manage Users
+                </button>
+                </div>
         </div>
 
 <?php if (empty($properties)): ?>
@@ -149,7 +151,7 @@ $deact_properties = $stmt_deact->fetchAll(PDO::FETCH_ASSOC);
                 <div class="property-content">
                     <h5 class="property-title"><?= htmlspecialchars($p['title']) ?></h5>
                     <p class="property-type"><strong>Type:</strong> <?= htmlspecialchars($p['property_type']) ?></p>
-                    <p class="property-price"><strong>Price:</strong> $<?= number_format($p['price'], 2) ?></p>
+                    <p class="property-price"><strong>Price:</strong> €<?= number_format($p['price'], 2) ?></p>
 
                     <div class="more-details hidden">
                         <p class="property-transaction"><strong>Transaction:</strong> <?= htmlspecialchars($p['transaction']) ?></p>
@@ -209,7 +211,7 @@ $deact_properties = $stmt_deact->fetchAll(PDO::FETCH_ASSOC);
                 <div class="property-content">
                     <h5 class="property-title"><?= htmlspecialchars($p['title']) ?></h5>
                     <p class="property-type"><strong>Type:</strong> <?= htmlspecialchars($p['property_type']) ?></p>
-                    <p class="property-price"><strong>Price:</strong> $<?= number_format($p['price'], 2) ?></p>
+                    <p class="property-price"><strong>Price:</strong> €<?= number_format($p['price'], 2) ?></p>
 
                     <div class="more-details hidden">
                         <p class="property-transaction"><strong>Transaction:</strong> <?= htmlspecialchars($p['transaction']) ?></p>

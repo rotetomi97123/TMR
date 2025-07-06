@@ -51,10 +51,10 @@ $active_users = $stmt_active->fetchAll(PDO::FETCH_ASSOC);
     <div class="container my-4 admin_wrapper">
       <div class="admin_text">
         <h1 class="mb-4">Users Management</h1>
-        <button id="toggle-users-btn" class="admin-show-prop">
-            Show Active Users
-        </button>
-        <button class="admin-manage-btn" onclick="location.href='admin.php'">Manage Properties</button>
+                <button id="toggle-users-btn" class="admin-show-prop">
+                    Show Active Users
+                </button>
+                <button class="admin-manage-btn" onclick="location.href='admin.php'">Manage Properties</button>
       </div>
 
       <?php if (empty($inactive_users)): ?>

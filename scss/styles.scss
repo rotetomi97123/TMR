@@ -1237,23 +1237,6 @@ body {
   border-radius: 8px;
   padding: 16px;
 }
-
-.item-swiper {
-  width: 100% !important;
-  max-width: 1000px !important;
-  height: 500px !important;
-  margin: 0 auto 20px auto;
-  border-radius: 16px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.item-swiper-slide img {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover;
-  border-radius: 16px;
-}
-
 .btn-delete {
   color: #dc3545;
   border: 1px solid #dc3545;
@@ -1281,6 +1264,9 @@ body {
   border: none;
   transition: 0.2s ease-in-out;
   cursor: pointer;
+  @media (min-width: 1024px) {
+    margin: 8px 8px 32px 0;
+  }
   &:hover {
     opacity: 80%;
   }
@@ -1291,6 +1277,7 @@ body {
   padding: 12px 20px;
   border-radius: 8px;
   border: none;
+  margin: 8px 8px 32px 0;
   transition: 0.2s ease-in-out;
   cursor: pointer;
   &:hover {
