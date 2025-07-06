@@ -39,46 +39,55 @@ if (isset($_GET['error'])) {
     <p style="color:red;"><?= $error ?></p>
 <?php endif; ?>
 
-    <div class="form-wrapper">
-        <form action="<?= $base_url ?>auth/register.php" method="POST" class="form-auth">
-            <h2 class="form-auth-title">Register</h2>
-            <div class="form-auth-accent"></div>
-            <div class="form-auth-group">
-                <label for="username" class="form-auth-label">Username:</label>
-                <input type="text" id="username" name="username" required maxlength="50" class="form-auth-input" placeholder="Enter your username" />
-            </div>
+   <div class="form-wrapper" id="register-form">
+  <form action="<?= $base_url ?>auth/register.php" method="POST" class="form-auth">
+    <h2 class="form-auth-title">Register</h2>
+    <div class="form-auth-accent"></div>
 
-            <div class="form-auth-group">
-                <label for="email" class="form-auth-label">Email:</label>
-                <input type="email" id="email" name="email" required maxlength="100" class="form-auth-input" placeholder="Enter your email" />
-            </div>
-
-            <div class="form-auth-group">
-                <label for="password" class="form-auth-label">Password:</label>
-                <input type="password" id="password" name="password" required minlength="6" class="form-auth-input" placeholder="Enter your password" />
-            </div>
-
-            <div class="form-auth-row">
-                <div class="form-auth-group">
-                    <label for="first_name" class="form-auth-label">First Name:</label>
-                    <input type="text" id="first_name" name="first_name" maxlength="50" class="form-auth-input" placeholder="First name" />
-                </div>
-
-                <div class="form-auth-group">
-                    <label for="last_name" class="form-auth-label">Last Name:</label>
-                    <input type="text" id="last_name" name="last_name" maxlength="50" class="form-auth-input" placeholder="Last name" />
-                </div>
-            </div>
-
-            <div class="form-auth-group">
-                <label for="phone" class="form-auth-label">Phone:</label>
-                <input type="tel" id="phone" name="phone" maxlength="20" class="form-auth-input" placeholder="Enter your phone number" />
-            </div>
-
-            <button type="submit" class="form-auth-button">Register</button>
-        </form>
+    <div class="form-auth-group">
+      <label for="username" class="form-auth-label">Username: <span class="required">*</span></label>
+      <input type="text" id="username" name="username"  class="form-auth-input" placeholder="Enter your username" />
+      <div id="error_username"></div>
     </div>
 
+    <div class="form-auth-group">
+      <label for="email" class="form-auth-label">Email: <span class="required">*</span></label>
+      <input type="email" id="email" name="email"  class="form-auth-input" placeholder="Enter your email" />
+      <div id="error_email"></div>
+    </div>
 
+    <div class="form-auth-group">
+      <label for="password" class="form-auth-label">Password: <span class="required">*</span></label>
+      <input type="password" id="password" name="password"  class="form-auth-input" placeholder="Enter your password" />
+      <div id="error_password"></div>
+    </div>
+
+    <div class="form-auth-row">
+      <div class="form-auth-group">
+        <label for="first_name" class="form-auth-label">First Name: <span class="required">*</span></label>
+        <input type="text" id="first_name" name="first_name"  class="form-auth-input" placeholder="First name" />
+        <div id="error_first_name"></div>
+      </div>
+
+      <div class="form-auth-group">
+        <label for="last_name" class="form-auth-label">Last Name: <span class="required">*</span></label>
+        <input type="text" id="last_name" name="last_name" maxlength="50" class="form-auth-input" placeholder="Last name" />
+        <div id="error_last_name"></div>
+      </div>
+    </div>
+
+    <div class="form-auth-group">
+      <label for="phone" class="form-auth-label">Phone: <span class="required">*</span></label>
+      <input type="tel" id="phone" name="phone" maxlength="20" class="form-auth-input" placeholder="Enter your phone number" />
+      <div id="error_phone"></div>
+    </div>
+
+    <button type="submit" class="form-auth-button">Register</button>
+  </form>
+</div>
+
+
+<script src="../js/navbar.js"></script>
+<script src="../js/auth.js"></script>
 </body>
 </html>

@@ -29,15 +29,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Verify password
     if (password_verify($password, $user['password_hash'])) {
         // Login success, save session
-        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['user_id'] = $user['user_id'];       // <-- user_id helyett id
         $_SESSION['username'] = $user['username'];
         $_SESSION['role'] = $user['role'];
         $_SESSION['email'] = $user['email'];
         $_SESSION['first_name'] = $user['first_name'];
         $_SESSION['last_name'] = $user['last_name'];
         $_SESSION['phone'] = $user['phone'];
-        
-        
 
         header("Location: ../index.php");
         exit;

@@ -1,17 +1,19 @@
       <div class="hero_wrapper_content">
-        <h1>Buy, rent, or sell your property easily</h1>
-        <p>A great platform to buy, sell, or even rent your properties without any commisions.</p>
-        <div class="hero_wrapper_contentFlex">
-          <div>
-            <p><span>50k+</span></p>
-            <p>renters</p>
-          </div>
-          <div>
-            <p><span>10k+</span></p>
-            <p>properties</p>
+        <div class="hero_wrapper_content_text">
+          <h1>Buy, rent, or sell your property easily</h1>
+          <p>A great platform to buy, sell, or even rent your properties without any commisions.</p>
+          <div class="hero_wrapper_contentFlex">
+            <div>
+              <p><span>50k+</span></p>
+              <p>renters</p>
+            </div>
+            <div>
+              <p><span>10k+</span></p>
+              <p>properties</p>
+            </div>
           </div>
         </div>
-        <form id="searchForm" class="searchForm">
+          <form id="searchForm" class="searchForm">
          <div class="radio_wrapper"> 
           <label class="radio-label" for="listing_type_rent">
             <input type="radio" name="listing_type" value="rent" id="listing_type_rent" checked />
@@ -26,16 +28,15 @@
           <div class="form-group-flex">
             <div class="form-group">
               <label for="location">Location</label>
-             <select id="location" class="form_input">
-            </select>
-          </div>
+              <input type="text" name="location" class="form_input" id="location">
+
+            </div>
           
           <div class="form-group">
             <label for="type">Type</label>
-            <Select id="type" class="form_input">
-              <option value="apartment">Apartman</option>
-              <option value="house">House</option>
-            </Select>
+            <select id="type" class="form_input">
+             
+            </select>
           </div>
           
           <div class="form-group-submit">  

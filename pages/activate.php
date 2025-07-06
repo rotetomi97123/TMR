@@ -9,7 +9,7 @@ if (!isset($_GET['token'])) {
     $message = "Invalid activation link.";
 } else {
     $token = $_GET['token'];
-    $stmt = $pdo->prepare("SELECT id, is_active FROM users WHERE activation_token = ?");
+    $stmt = $pdo->prepare("SELECT user_id, is_active FROM users WHERE activation_token = ?");
     $stmt->execute([$token]);
     $user = $stmt->fetch();
 
@@ -18,8 +18,8 @@ if (!isset($_GET['token'])) {
     } elseif ($user['is_active']) {
         $message = "Your account is already activated.";
     } else {
-        $update = $pdo->prepare("UPDATE users SET is_active = 1, activation_token = NULL WHERE id = ?");
-        if ($update->execute([$user['id']])) {
+        $update = $pdo->prepare("UPDATE users SET is_active = 1, activation_token = NULL WHERE user_id = ?");
+        if ($update->execute([$user['user_id']])) {
             $message = "Your account has been activated! Redirecting to login page...";
         } else {
             $message = "Failed to activate account. Please try again later.";
@@ -27,6 +27,7 @@ if (!isset($_GET['token'])) {
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -101,5 +102,6 @@ if (!isset($_GET['token'])) {
             <a href="<?= htmlspecialchars($redirectUrl) ?>">Go to Login</a>
         </div>
     </div>
+    <script src="../js/navbar.js"></script>
 </body>
 </html>

@@ -38,18 +38,17 @@
                 </label>     
               </div>
             <div class="form-group-flex">
-              <div class="form-group">
-                <label for="location">Location</label>
-                <select id="location" class="form_input">
-                </select>
+             <div class="form-group-flex">
+                <div class="form-group">
+                  <label for="location">Location</label>
+                  <input type="text" name="location" class="form_input" id="location">
               </div>
               
               <div class="form-group">
                 <label for="type">Type</label>
-                <Select id="type" class="form_input">
-                  <option value="apartment">Apartman</option>
-                  <option value="house">House</option>
-                </Select>
+                <select id="type" class="form_input" name="type">
+                
+                </select>
               </div>
               <div class="form-group">
                 <label for="rental_price">Price to €</label>
@@ -84,6 +83,8 @@
         </div>
         <div id="results">Loading...</div>
       </div>
+    <?php include '../includes/footer.php'; ?>
+
     <script src="../js/navbar.js"></script>
     <script src="../js/result.js"></script>
 

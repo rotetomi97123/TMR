@@ -14,11 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
       );
       const listing_type = listingTypeRadio ? listingTypeRadio.value : "";
 
-      if (location.length < 2) {
-        console.warn("Please enter at least 2 characters.");
-        return;
-      }
-
       if (!listing_type) {
         console.warn("Please select a listing type.");
         return;
@@ -34,141 +29,174 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Populate location dropdown
   window.addEventListener("DOMContentLoaded", () => {
-    fetch(BASE_URL + "api/get_cities.php")
+    fetch(BASE_URL + "api/get_type.php")
       .then((res) => res.json())
-      .then((cities) => {
-        const select = document.getElementById("location");
-        cities.forEach((city) => {
+      .then((property_types) => {
+        const select = document.getElementById("type");
+        property_types.forEach((type) => {
           const option = document.createElement("option");
-          option.value = city;
-          option.textContent = city;
+          option.value = type;
+          option.textContent = type.charAt(0).toUpperCase() + type.slice(1);
           select?.appendChild(option);
         });
       });
   });
-  let currentProperty = 0;
-  let autoRotateInterval;
-
-  function initPropertyShowcase() {
-    const properties = document.querySelectorAll(".property_card");
-    const dots = document.querySelectorAll(".showcase_dots .dot");
-    const prevArrow = document.getElementById("prevArrow");
-    const nextArrow = document.getElementById("nextArrow");
-
-    if (properties.length === 0) return;
-
-    function showProperty(index) {
-      properties.forEach((card) => card.classList.remove("active", "next"));
-      dots.forEach((dot) => dot.classList.remove("active"));
-
-      if (properties[index]) properties[index].classList.add("active");
-      if (dots[index]) dots[index].classList.add("active");
-
-      const nextIndex = (index + 1) % properties.length;
-      if (properties[nextIndex]) properties[nextIndex].classList.add("next");
-
-      currentProperty = index;
-    }
-
-    function autoRotate() {
-      const nextIndex = (currentProperty + 1) % properties.length;
-      showProperty(nextIndex);
-    }
-
-    // Arrow event handlers
-    prevArrow?.addEventListener("click", () => {
-      clearInterval(autoRotateInterval);
-      const prevIndex =
-        (currentProperty - 1 + properties.length) % properties.length;
-      showProperty(prevIndex);
-      autoRotateInterval = setInterval(autoRotate, 6000);
-    });
-
-    nextArrow?.addEventListener("click", () => {
-      clearInterval(autoRotateInterval);
-      const nextIndex = (currentProperty + 1) % properties.length;
-      showProperty(nextIndex);
-      autoRotateInterval = setInterval(autoRotate, 6000);
-    });
-
-    window.showProperty = showProperty;
-    autoRotateInterval = setInterval(autoRotate, 6000);
-
-    const showcase = document.querySelector(".property_showcase");
-    showcase?.addEventListener("mouseenter", () =>
-      clearInterval(autoRotateInterval)
-    );
-    showcase?.addEventListener(
-      "mouseleave",
-      () => (autoRotateInterval = setInterval(autoRotate, 4000))
-    );
-
-    showProperty(0);
-  }
-
-  // Fetch slider data
+});
+document.addEventListener("DOMContentLoaded", function () {
   fetch(BASE_URL + "api/hero_slider.php", { method: "POST" })
     .then((res) => res.json())
     .then((data) => {
-      if (data.success && data.data.length > 0) {
-        const showcase = document.querySelector(".property_showcase");
-        const dots = document.querySelector(".showcase_dots");
+      const swiperWrapper = document.querySelector(".swiper-wrapper");
 
-        data.data.forEach((listing, index) => {
-          let priceDisplay = "";
-          if (listing.listing_type === "sale") {
-            let priceEUR =
-              Math.floor(parseFloat(listing.rental_price) / 117 / 1000) * 1000;
-            priceDisplay = priceEUR.toLocaleString("de-DE") + " €";
-          } else {
-            // Rental price formatting
-            const price =
-              Math.ceil(parseFloat(listing.rental_price) / 117 / 50) * 50;
-            priceDisplay = `€${price}/month`;
-          }
-          const imageUrl =
-            listing.image_url || "https://via.placeholder.com/400x250";
-          const badgeText =
-            index === 0 ? "Featured" : index === 1 ? "New" : "Popular";
+      data.data.forEach((listing, index) => {
+        // CALCULATE PRICE
+        let priceHtml = "";
+        const price = Math.round(listing.price);
 
-          const card = document.createElement("div");
-          card.className = "property_card";
-          card.addEventListener("click", () => {
-            localStorage.setItem("selectedListing", JSON.stringify(listing));
-            window.location.href = BASE_URL + "pages/item.php";
-          });
-          card.innerHTML = `
-          <div class="property_image" style="background-image: url('${imageUrl}');">
-            <div class="property_badge">${badgeText}</div>
-          </div>
-          <div class="property_info">
-            <p class="property_price"><span>${priceDisplay}</span></p>
-            <h4 class="property_title">${
-              listing.title || "Untitled Property"
-            }</h4>
-            <p class="property_location">${listing.city_area}</p>
-            <div class="property_features">
-              <p><img src=${BASE_URL + "assets/bed.svg"} class="icon" /> ${
-            listing.beds
-          } beds</p>
-              <p><img src=${BASE_URL + "assets/bath.svg"} class="icon" /> ${
-            listing.bathroom
-          } bathrooms</p>
-              <p><i class="bi bi-aspect-ratio"></i> ${
-                listing.square_meters
-              } m²</p>
-            </div>
-          </div>
-        `;
+        if (listing.transaction === "rent") {
+          priceHtml = `<p class="prop_price"><span>${price} €</span> / month</p></p>`;
+        } else {
+          priceHtml = `<p class="prop_price"><span>${price} €</span></p>`;
+        }
 
-          showcase?.appendChild(card);
-
-          const dot = document.createElement("div");
-          dot.className = "dot";
-          dots?.appendChild(dot);
+        const slide = document.createElement("div");
+        slide.className = "swiper-slide property_card"; // add swiper-slide class
+        slide.addEventListener("click", () => {
+          localStorage.setItem("selectedListing", JSON.stringify(listing));
+          window.location.href = BASE_URL + "pages/item.php";
         });
 
-        initPropertyShowcase();
+        slide.innerHTML = `
+         <img src="${
+           listing.image_url
+         }" alt="property_image" class="property_image" />
+      <div class="listing_content">
+        ${priceHtml}
+        <h4>${listing.city}</h4>
+        <p>${listing.address}</p>
+        <div class="listing_content_properties">
+          <p><img src=${
+            BASE_URL + "assets/bed.svg"
+          } alt="bed icon" class="icon" /> ${listing.beds} </p>
+          <p><img src=${
+            BASE_URL + "assets/bath.svg"
+          } alt="bathroom icon" class="icon" /> ${listing.bathroom} </p>
+          <p><i class="bi bi-aspect-ratio"></i> ${listing.size} m²</p>
+        </div>
+      </div>
+    `;
+
+        swiperWrapper.appendChild(slide);
+      });
+
+      // Initialize swiper AFTER slides added
+      const swiper = new Swiper(".swiper", {
+        loop: true,
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        autoplay: {
+          delay: 3000, // 3000ms = 3 seconds
+          disableOnInteraction: false, // keeps autoplay running after interactions
+        },
+      });
+    })
+    .catch((error) => {
+      console.error("Error fetching slides:", error);
+    });
+
+  const options = {
+    decimalPlaces: 1,
+    duration: 4,
+  };
+  const options2 = {
+    duration: 5,
+  };
+  const options3 = {
+    duration: 6,
+  };
+
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const countUp1 = new countUp.CountUp("elso", 7.5, options);
+        if (!countUp1.error) {
+          countUp1.start();
+          observer.unobserve(entry.target); // csak egyszer animáljon
+        } else {
+          console.error(countUp1.error);
+        }
+        const countUp2 = new countUp.CountUp("masodik", 4000, options2);
+        if (!countUp2.error) {
+          countUp2.start();
+          observer.unobserve(entry.target); // csak egyszer animáljon
+        } else {
+          console.error(countUp2.error);
+        }
+        const countUp3 = new countUp.CountUp("harmadik", 2500, options3);
+        if (!countUp3.error) {
+          countUp3.start();
+          observer.unobserve(entry.target); // csak egyszer animáljon
+        } else {
+          console.error(countUp3.error);
+        }
       }
+    });
+  });
+
+  const target = document.getElementById("elso");
+  if (target) observer.observe(target);
+
+  fetch(BASE_URL + "api/recent_properties.php", { method: "POST" })
+    .then((res) => res.json())
+    .then((data) => {
+      const recentProps = document.querySelector(".recent-props");
+
+      data.data.forEach((listing) => {
+        let priceHtml = "";
+        const price = Math.round(listing.price);
+
+        if (listing.transaction === "rent") {
+          priceHtml = `<p class="prop_pricee"><span>${price} €</span> / month</p>`;
+        } else {
+          priceHtml = `<p class="prop_pricee"><span>${price} €</span></p>`;
+        }
+
+        const slide = document.createElement("div");
+        slide.className = "property_carde";
+        slide.addEventListener("click", () => {
+          localStorage.setItem("selectedListing", JSON.stringify(listing));
+          window.location.href = BASE_URL + "pages/item.php";
+        });
+
+        slide.innerHTML = `
+            <img src="${
+              listing.image_url
+            }" alt="property_imagee" class="property_imagee" />
+            <div class="listing_contente">
+              ${priceHtml}
+              <h4>${listing.city}</h4>
+              <p>${listing.address}</p>
+              <div class="listing_content_propertiese">
+                <p><img src="${
+                  BASE_URL + "assets/bed.svg"
+                }" alt="bed icon" class="icone" /> ${listing.beds}</p>
+                <p><img src="${
+                  BASE_URL + "assets/bath.svg"
+                }" alt="bathroom icon" class="icone" /> ${listing.bathroom}</p>
+                <p><i class="bi bi-aspect-ratio"></i> &nbsp; ${
+                  listing.size
+                } m²</p>
+              </div>
+            </div>
+          `;
+
+        recentProps.appendChild(slide);
+      });
     });
 });

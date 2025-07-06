@@ -1,12 +1,13 @@
 <?php
 require_once '../db_config.php';
 require_once __DIR__ . '/../vendor/autoload.php';
+require_once "../includes/config.php";
 
 use Dotenv\Dotenv;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// Load environment
+// Load environment variables
 $dotenv = Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->load();
 
@@ -23,7 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         die("Please fill in all required fields.");
     }
 
-    $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ? OR email = ?");
+    // ❗ FIX: Check by 'user_id' instead of non-existent 'id'
+    $stmt = $pdo->prepare("SELECT user_id FROM users WHERE username = ? OR email = ?");
     $stmt->execute([$username, $email]);
     if ($stmt->fetch()) {
         die("Username or email already taken.");
@@ -37,12 +39,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         VALUES (?, ?, ?, ?, ?, ?, ?, 0, ?)");
     $stmt->execute([$username, $email, $password_hash, $first_name, $last_name, $phone, $role, $activation_token]);
 
-    $activation_link = "http://" . $_SERVER['HTTP_HOST'] . $base_url . "pages/activate.php?token=" . $activation_token;
+    $activation_link = "http://" . $_SERVER['HTTP_HOST'] . '/' . $base_url . "pages/activate.php?token=" . $activation_token;
 
     $mail = new PHPMailer(true);
 
     try {
-        // SMTP config for Mailjet
+        // SMTP settings from .env
         $mail->isSMTP();
         $mail->Host       = $_ENV['MAIL_HOST'];
         $mail->SMTPAuth   = true;
@@ -51,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $mail->SMTPSecure = 'tls';
         $mail->Port       = $_ENV['MAIL_PORT'];
 
-        // Email settings
+        // Email content
         $mail->setFrom('tot.tamas04@gmail.com', 'StanoviSrbija');
         $mail->addAddress($email, $username);
 
@@ -87,7 +89,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </p>
             </div>
         ';
-
 
         $mail->send();
         echo "Registration successful! Please check your email to activate your account.";

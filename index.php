@@ -20,36 +20,37 @@
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
       rel="stylesheet"
     />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"
-    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+
     <link rel="icon" href="./assets/favicon.ico" type="image/x-icon" />
   </head>
   <body>
     <?php include 'includes/header.php'; ?>
-    
+  <!-- HERO SECTION -->
   <div class="hero_bg">
     <div class="hero_wrapper">
     <?php include 'includes/banner_form.php'; ?>
-      <div class="featured_properties">
-        <div class="property_showcase"></div>
-        <div class="showcase_dots"></div>
-      <button id="prevArrow" class="property_arrow prev_arrow" aria-label="Previous">
-        <i class="bi bi-chevron-left"></i>
-      </button>
-      <button id="nextArrow" class="property_arrow next_arrow" aria-label="Next">
-        <i class="bi bi-chevron-right"></i>
-      </button>
+      <div class="swiper " >
+        <div class="swiper-wrapper .property_showcase">
+        </div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-pagination"></div>
       </div>
+
     </div>
   </div>
+    <!-- HERO SECTION END -->
     <?php include 'includes/newhome.php'; ?>
+    <?php include 'includes/recent_list.php'; ?>
+    <?php include 'includes/footer.php'; ?>
     <?php require_once 'includes/config.php'; ?>
       <script>
-        const BASE_URL = "<?= $base_url ?>";
+      const BASE_URL = "<?= $base_url ?>";
       </script>
-    <script src="js/navbar.js"></script>
-    <script src="js/main.js"></script>
+      <script src="js/navbar.js"></script>
+      <script src="js/main.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.6.2/countUp.umd.js"></script>  
   </body>
 </html>

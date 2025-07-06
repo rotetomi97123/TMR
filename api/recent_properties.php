@@ -5,7 +5,8 @@ header('Content-Type: application/json');
 require_once '../db_config.php';
 
 try {
-$sql = "
+    // SQL: Get first 3 properties with type, main image, and details
+ $sql = "
     SELECT 
         p.property_id,
         p.title,
@@ -36,20 +37,21 @@ $sql = "
     JOIN users u ON p.user_id = u.user_id
     WHERE p.is_active_property = 1
     ORDER BY p.created_at DESC
-    LIMIT 3
+    LIMIT 6
 ";
 
 
 
-$stmt = $pdo->prepare($sql);
-$stmt->execute();
-$properties = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-echo json_encode([
-    'status' => 'success',
-    'count' => count($properties),
-    'data' => $properties
-]);
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $properties = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    echo json_encode([
+        'status' => 'success',
+        'count' => count($properties),
+        'data' => $properties
+    ]);
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode(['error' => $e->getMessage()]);

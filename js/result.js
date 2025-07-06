@@ -1,154 +1,165 @@
-const resultsContainer = document.getElementById("results");
-const locationSelect = document.getElementById("location");
-const searchForm = document.getElementById("searchForm");
+document.addEventListener("DOMContentLoaded", () => {
+  const resultsContainer = document.getElementById("results");
+  const typeSelect = document.getElementById("type");
+  const searchForm = document.getElementById("searchForm");
 
-function renderListings(listings) {
-  if (!listings.length) {
-    resultsContainer.innerText = "No listings found.";
-    return;
+  // Segédfüggvény: csak akkor ad vissza HTML-t, ha van érték
+  function renderField(label, value, unit = "") {
+    if (value === null || value === undefined || value === "") return "";
+    return `<p><strong>${label}:</strong> ${value}${unit}</p>`;
   }
 
-  // Clear container first
-  resultsContainer.innerHTML = "";
-
-  listings.forEach((listing) => {
-    const card = document.createElement("div");
-    card.className = "listing property_card";
-    let priceEUR = 0;
-    if (listing.listing_type === "rent") {
-      priceEUR = Math.ceil(parseFloat(listing.rental_price) / 117 / 50) * 50;
-    } else {
-      priceEUR =
-        Math.floor(parseFloat(listing.rental_price) / 117 / 1000) * 1000;
+  // Az egyes kártyák renderelése
+  function renderListings(listings) {
+    if (!listings.length) {
+      resultsContainer.innerText = "No listings found.";
+      return;
     }
 
-    priceEUR = priceEUR.toLocaleString("de-DE") + " €";
-    card.innerHTML = `
-      <img src="${listing.image_url}" alt="property_image" />
-      <div class="listing_content">
-        <p class="listing_content_price"><span>${priceEUR}</p>
-        <h4>${listing.city_area}</h4>
-        <p>${listing.address}</p>
-        <div class="listing_content_properties">
-          <p><img src=${
-            BASE_URL + "assets/bed.svg"
-          } alt="bed icon" class="icon" /> ${listing.beds} beds</p>
-          <p><img src=${
-            BASE_URL + "assets/bath.svg"
-          } alt="bathroom icon" class="icon" /> ${
-      listing.bathroom
-    } bathrooms</p>
-          <p><i class="bi bi-aspect-ratio"></i> ${listing.square_meters} m²</p>
+    resultsContainer.innerHTML = ""; // töröljük az előzőeket
+
+    listings.forEach((listing) => {
+      const card = document.createElement("div");
+      card.className = "listing property_card";
+
+      // Ár kerekítése és megjelenítése
+      const price = Math.round(listing.price);
+      let priceHtml = "";
+      if (listing.transaction === "rent") {
+        priceHtml = price
+          ? `<p class="prop_price"><span>${price} €</span> / month</p>`
+          : "";
+      } else {
+        priceHtml = price
+          ? `<p class="prop_price"><span>${price} €</span></p>`
+          : "";
+      }
+
+      const image = listing.image_url || "../assets/placeholder.jpg";
+
+      // Kártya belső HTML összeállítása, csak nem üres mezők jelennek meg
+      card.innerHTML = `
+        <img src="${image}" alt="property image" class="prop_image" />
+        <div class="prop_content">
+          ${priceHtml}
+          ${renderField("City", listing.city)}
+          ${renderField("Address", listing.address)}
+          <div class="prop_details">
+            ${renderField(
+              "",
+              listing.beds ?? "",
+              ` <img src="../assets/bed.svg" class="prop_icon" />`
+            )}
+            ${renderField(
+              "",
+              listing.bathroom ?? "",
+              ` <img src="../assets/bath.svg" class="prop_icon" />`
+            )}
+            ${renderField(
+              "",
+              listing.square_meters ?? "",
+              ` m² <i class="bi bi-aspect-ratio"></i>`
+            )}
+          </div>
         </div>
-      </div>
-    `;
+      `;
 
-    card.addEventListener("click", () => {
-      localStorage.setItem("selectedListing", JSON.stringify(listing));
-      window.location.href = BASE_URL + "pages/item.php";
-    });
-
-    resultsContainer.appendChild(card);
-  });
-}
-
-function fetchListings(
-  location,
-  type,
-  listing_type,
-  rental_price,
-  square_meters
-) {
-  resultsContainer.innerText = "Loading...";
-  fetch(BASE_URL + "api/listing.php", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({
-      location,
-      type,
-      listing_type,
-      rental_price,
-      square_meters,
-    }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.success) renderListings(data.data);
-      else resultsContainer.innerText = "Error: " + data.error;
-    })
-    .catch((err) => {
-      resultsContainer.innerText = "Fetch error: " + err;
-    });
-}
-
-// Load cities and return a Promise so we can await it
-function loadCities() {
-  return fetch(BASE_URL + "api/get_cities.php")
-    .then((res) => res.json())
-    .then((cities) => {
-      locationSelect.innerHTML = ""; // Clear previous options
-      cities.forEach((city) => {
-        const option = document.createElement("option");
-        option.value = city;
-        option.textContent = city;
-        locationSelect.appendChild(option);
+      card.addEventListener("click", () => {
+        localStorage.setItem("selectedListing", JSON.stringify(listing));
+        window.location.href = "../pages/item.php";
       });
+
+      resultsContainer.appendChild(card);
     });
-}
-
-// Prefill form inputs from parameters
-function prefillForm({ location, type, listing_type }) {
-  locationSelect.value = location;
-  document.getElementById("type").value = type;
-
-  const radioToCheck = document.querySelector(
-    `input[name="listing_type"][value="${listing_type}"]`
-  );
-  if (radioToCheck) radioToCheck.checked = true;
-}
-
-async function handleInitialSearch() {
-  const params = new URLSearchParams(window.location.search);
-  const location = params.get("location");
-  const type = params.get("type");
-  const listing_type = params.get("listing_type");
-  const rental_price = params.get("rental_price");
-  const square_meters = params.get("square_meters");
-
-  if (!location || !type || !listing_type) {
-    resultsContainer.innerText =
-      "Location, type,price, and listing type must be provided.";
-    return;
   }
 
-  await loadCities(); // wait for cities to load first
-  prefillForm({ location, type, listing_type });
-  fetchListings(location, type, listing_type, rental_price, square_meters);
-}
+  // Az API hívás, keresés
+  function fetchListings(city, type, transaction, price, square_meters) {
+    resultsContainer.innerText = "Loading...";
+    fetch("../api/listing.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        location: city,
+        type,
+        listing_type: transaction,
+        rental_price: price,
+        square_meters,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          renderListings(data.data);
+        } else {
+          resultsContainer.innerText = "Error: " + data.error;
+        }
+      })
+      .catch((err) => {
+        resultsContainer.innerText = "Fetch error: " + err;
+      });
+  }
 
-window.addEventListener("DOMContentLoaded", () => {
+  // Típusok betöltése a selectbe
+  function loadTypes() {
+    return fetch("../api/get_type.php")
+      .then((res) => res.json())
+      .then((types) => {
+        typeSelect.innerHTML = "";
+        types.forEach((type) => {
+          const option = document.createElement("option");
+          option.value = type;
+          option.textContent = type.charAt(0).toUpperCase() + type.slice(1);
+          typeSelect.appendChild(option);
+        });
+      });
+  }
+
+  // Form előtöltése url paraméterek alapján
+  function prefillForm({ location, type, listing_type }) {
+    document.getElementById("location").value = location || "";
+    typeSelect.value = type || "";
+
+    const radio = document.querySelector(
+      `input[name="listing_type"][value="${listing_type}"]`
+    );
+    if (radio) radio.checked = true;
+  }
+
+  async function handleInitialSearch() {
+    const params = new URLSearchParams(window.location.search);
+    const location = params.get("location") || "";
+    const type = params.get("type") || "";
+    const listing_type = params.get("listing_type") || "";
+    const rental_price = params.get("rental_price") || "";
+    const square_meters = params.get("square_meters") || "";
+
+    await loadTypes();
+    prefillForm({ location, type, listing_type });
+    fetchListings(location, type, listing_type, rental_price, square_meters);
+  }
+
   handleInitialSearch();
-});
 
-searchForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const location = locationSelect.value.trim();
-  const type = document.getElementById("type").value;
-  const listingTypeRadio = document.querySelector(
-    'input[name="listing_type"]:checked'
-  );
-  const listing_type = listingTypeRadio ? listingTypeRadio.value : "";
-  const rental_price = document.getElementById("rental_price").value.trim();
-  const square_meters = document.getElementById("square_meters").value.trim();
+  searchForm.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-  if (location.length < 2) {
-    console.warn("Please enter at least 2 characters.");
-    return;
-  }
-  if (!listing_type) {
-    console.warn("Please select a listing type.");
-    return;
-  }
+    const type = typeSelect.value.trim();
+    const location = document.getElementById("location").value.trim();
+    const listingTypeRadio = document.querySelector(
+      'input[name="listing_type"]:checked'
+    );
+    const listing_type = listingTypeRadio ? listingTypeRadio.value : "";
+    const rental_price =
+      document.getElementById("rental_price")?.value.trim() || "";
+    const square_meters =
+      document.getElementById("square_meters")?.value.trim() || "";
 
-  fetchListings(location, type, listing_type, rental_price, square_meters);
+    if (!listing_type) {
+      console.warn("Select listing type.");
+      return;
+    }
+
+    fetchListings(location, type, listing_type, rental_price, square_meters);
+  });
 });
