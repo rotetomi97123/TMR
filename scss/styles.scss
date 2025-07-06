@@ -1171,13 +1171,13 @@ body {
 .btn-show-more {
   background: none;
   border: none;
-  color: #007bff;
+  color: $mainColor;
   cursor: pointer;
   padding: 0;
-  margin-top: auto;
   font-size: 0.95rem;
   align-self: flex-start;
   transition: color 0.2s ease;
+  margin: 8px 0;
 }
 
 .btn-show-more:hover {
@@ -1236,4 +1236,52 @@ body {
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 16px;
+}
+.btn-delete {
+  color: #dc3545;
+  border: 1px solid #dc3545;
+  transition: 0.2s;
+
+  &:hover {
+    background-color: #dc3545;
+    color: #fff;
+  }
+}
+.d-flex {
+  .btn-action {
+    flex: 0 0 70%;
+  }
+
+  .btn-delete {
+    flex: 0 0 30%;
+  }
+}
+.admin-manage-btn {
+  color: white;
+  background: $mainColor;
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: none;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+  &:hover {
+    opacity: 80%;
+  }
+}
+.admin-show-prop {
+  color: white;
+  background: $mainColor;
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: none;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+  &:hover {
+    opacity: 80%;
+  }
+}
+@media (max-width: 1024px) {
+  .admin-show-prop {
+    display: none;
+  }
 }

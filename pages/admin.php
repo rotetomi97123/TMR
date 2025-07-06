@@ -125,9 +125,12 @@ $deact_properties = $stmt_deact->fetchAll(PDO::FETCH_ASSOC);
         <?php include "../includes/header.php" ?>
     <div class="container my-4 admin_wrapper">
         <div class="admin_text ">
-            <h1 class="mb-4">Properties Status</h1>
+            <h1 class="mb-4">Property Management</h1>
             <button id="toggle-properties-btn" class="admin_show_prop">
                 Show Active Properties
+            </button>
+            <button class="admin-manage-btn" onclick="location.href='../pages/admin_users.php'">
+                Manage Users
             </button>
         </div>
 
@@ -176,14 +179,21 @@ $deact_properties = $stmt_deact->fetchAll(PDO::FETCH_ASSOC);
                     </div>
 
                     <button class="btn-show-more" type="button">Show More</button>
-
-                   <button
-                        class="btn btn-success btn-action"
-                        data-id="<?= (int)$p['property_id'] ?>"
-                        data-action="activate"
+                    <div class="d-flex gap-2">
+                        <button
+                                class="btn btn-success btn-action"
+                                data-id="<?= (int)$p['property_id'] ?>"
+                                data-action="activate"
+                                >
+                                Activate
+                        </button>
+                            <button
+                            class="btn btn-outline-danger btn-delete"
+                            data-id="<?= (int)$p['property_id'] ?>"
                         >
-                        Activate
-                   </button>
+                            Delete
+                        </button>
+                    </div>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -230,14 +240,13 @@ $deact_properties = $stmt_deact->fetchAll(PDO::FETCH_ASSOC);
 
                     <button class="btn-show-more" type="button">Show More</button>
 
-                    <button
-                        class="btn btn-danger btn-action"
-                        data-id="<?= (int)$p['property_id'] ?>"
-                        data-action="deactivate"
+                        <button
+                            class="btn btn-danger btn-action"
+                            data-id="<?= (int)$p['property_id'] ?>"
+                            data-action="deactivate"
                         >
-                        Deactivate
-                    </button>
-
+                            Deactivate
+                        </button>
                 </div>
             </div>
         <?php endforeach; ?>

@@ -80,4 +80,33 @@ document.addEventListener("DOMContentLoaded", () => {
       toggleBtn.textContent = "Show Active Properties";
     }
   });
+
+  document.querySelectorAll(".btn-delete").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const propertyId = button.dataset.id;
+
+      if (
+        !confirm("Are you sure you want to delete this property permanently?")
+      )
+        return;
+
+      try {
+        const res = await fetch("../auth/delete_property.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: propertyId }),
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          const card = button.closest(".property-card");
+          card?.remove();
+        } else {
+          alert(data.message || "Deletion failed.");
+        }
+      } catch (err) {
+        alert("Error connecting to server.");
+      }
+    });
+  });
 });

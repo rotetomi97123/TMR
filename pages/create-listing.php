@@ -254,7 +254,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div id="error_bathroom" class="error-message"></div>
   </div>
 
-
+<!-- UJ -->
   <div class="mb-3">
     <label class="form-label" for="rooms">Rooms</label>
     <input type="number" id="rooms" name="rooms" class="form-control" />
@@ -298,7 +298,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </select>
     <div id="error_parking" class="error-message"></div>
   </div>
-
+<!-- UJ -->
   <div class="mb-3">
     <label class="form-label" for="square_meters">Square Meters</label>
     <input type="number" id="square_meters" name="square_meters" class="form-control" />
