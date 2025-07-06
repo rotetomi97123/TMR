@@ -83,6 +83,8 @@
         </div>
         <div id="results">Loading...</div>
       </div>
+    <?php include '../includes/footer.php'; ?>
+
     <script src="../js/navbar.js"></script>
     <script src="../js/result.js"></script>
 
