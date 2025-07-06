@@ -35,9 +35,12 @@ try {
     LEFT JOIN property_images pi ON p.property_id = pi.property_id AND pi.is_main = 1
     LEFT JOIN property_details pd ON p.property_id = pd.property_id
     JOIN users u ON p.user_id = u.user_id
+    WHERE p.is_active_property = 1
     ORDER BY p.created_at DESC
     LIMIT 6
 ";
+
+
 
 
     $stmt = $pdo->prepare($sql);

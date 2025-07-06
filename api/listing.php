@@ -25,7 +25,7 @@ try {
 
   
     // SQL alap
-   $sql = "
+$sql = "
     SELECT 
         p.property_id,
         p.title,
@@ -56,7 +56,10 @@ try {
     JOIN users u ON p.user_id = u.user_id
     WHERE pt.name = :type
       AND p.transaction = :listing_type
+      AND p.is_active_property = 1
 ";
+
+
 
 
     $params = [

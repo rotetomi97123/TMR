@@ -26,9 +26,15 @@
       <span class="nav-username">Welcome, <?= htmlspecialchars($_SESSION['username']) ?></span>
       <a href="<?= $base_url ?>auth/logout.php" class="nav-auth-logout" style="margin-left: 10px;">Logout</a>
       <a href="<?= $base_url ?>pages/profil.php" class="nav-auth-profil" style="margin-left: 10px;">Profil</a>
+      <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+        <a href="<?= $base_url ?>pages/admin.php" class="nav-auth-profil-mobile" style="margin-left: 10px;">Admin</a>
+      <?php endif; ?>
     <?php else: ?>
       <a href="<?= $base_url ?>pages/login.php" class="nav-auth-login">Login</a>
       <a href="<?= $base_url ?>pages/register.php" class="nav-auth-register">Sign Up</a>
+      <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+        <a href="<?= $base_url ?>pages/admin.php" class="nav-auth-profil-mobile" style="margin-left: 10px;">Admin</a>
+      <?php endif; ?>
     <?php endif; ?>
   </div>
 
@@ -52,7 +58,10 @@
         <span class="nav-username-mobile">Welcome, <?= htmlspecialchars($_SESSION['username']) ?></span>
         <a href="<?= $base_url ?>auth/logout.php" class="nav-auth-logout-mobile" style="margin-left: 10px;">Logout</a>
         <a href="<?= $base_url ?>pages/profil.php" class="nav-auth-profil-mobile" style="margin-left: 10px;">Profil</a>
-      <?php else: ?>
+        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+          <a href="<?= $base_url ?>pages/admin.php" class="nav-auth-profil-mobile" style="margin-left: 10px;">Admin</a>
+        <?php endif; ?>
+        <?php else: ?>
         <a href="<?= $base_url ?>pages/login.php" class="nav-auth-login">Login</a>
         <a href="<?= $base_url ?>pages/register.php" class="nav-auth-register-mobile">Sign Up</a>
       <?php endif; ?>

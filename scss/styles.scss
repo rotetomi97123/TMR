@@ -1077,3 +1077,158 @@ body {
 .nav-auth-profil-mobile {
   color: white !important;
 }
+// ADMIN STYLES
+.admin-flex {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  position: relative;
+  max-width: 1024px;
+  margin: 0 auto;
+}
+/* Container grid */
+.properties-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 2rem;
+  width: 400px;
+}
+
+/* Card style */
+.property-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  transition: box-shadow 0.3s ease;
+}
+
+.property-card:hover {
+  box-shadow: 0 6px 15px rgb(0 0 0 / 0.15);
+}
+
+/* Image */
+.property-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+/* Content wrapper */
+.property-content {
+  padding: 1rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Titles and text */
+.property-title {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  color: #222;
+}
+
+.property-type,
+.property-price,
+.property-transaction,
+.property-available,
+.property-address,
+.property-description,
+.property-details-list,
+.property-contact-info {
+  margin: 0.25rem 0;
+  color: #444;
+  font-size: 0.9rem;
+}
+
+.property-description {
+  white-space: pre-wrap;
+}
+
+.property-details-list {
+  list-style-type: disc;
+  padding-left: 1.2rem;
+  margin: 0.5rem 0;
+}
+
+/* Hidden details */
+.more-details.hidden {
+  display: none;
+}
+
+/* Buttons */
+.btn-show-more {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  padding: 0;
+  margin-top: auto;
+  font-size: 0.95rem;
+  align-self: flex-start;
+  transition: color 0.2s ease;
+}
+
+.btn-show-more:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+.btn-activate {
+  margin-top: 1rem;
+  background-color: $mainColor;
+  color: white;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: 600;
+  align-self: flex-start;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+}
+
+.btn-activate:hover {
+  background-color: $mainColor;
+}
+
+/* No properties message */
+.no-properties-msg {
+  font-style: italic;
+  color: #666;
+  font-size: 1.1rem;
+}
+@media (max-width: 1024px) {
+  #active-properties,
+  #inactive-properties {
+    display: none !important;
+  }
+
+  #inactive-properties.active,
+  #active-properties.active {
+    display: flex !important;
+  }
+}
+.admin_show_prop {
+  color: white;
+  background: $mainColor;
+  padding: 12px 18px;
+  border-radius: 8px;
+  border: none;
+  margin: 16px 0;
+}
+.admin_text {
+  max-width: 1024px;
+  margin: 0 auto;
+}
+.admin_wrapper {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+}
