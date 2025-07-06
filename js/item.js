@@ -8,8 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  console.log(listing);
-
   let priceHtml = "";
   if (listing.transaction === "rent") {
     priceHtml = listing.price
@@ -21,40 +19,41 @@ document.addEventListener("DOMContentLoaded", () => {
       : "";
   }
 
-  // Helper function to render only if value exists and is not empty string
   const renderField = (label, value) => {
-    if (value === null || value === undefined || value === "") return "";
+    if (!value) return "";
     return `<p><strong>${label}:</strong> ${value}</p>`;
   };
 
-  // Format date if exists
   const availableFrom = listing.available_from
     ? new Date(listing.available_from).toLocaleDateString()
     : "";
 
-  // Furnished display (assuming 0 = No, 1 = Yes)
-  let furnishedText = "";
-  if (listing.furnished === 1 || listing.furnished === "1") {
-    furnishedText = "Yes";
-  } else if (listing.furnished === 0 || listing.furnished === "0") {
-    furnishedText = "No";
-  }
+  const furnishedText =
+    listing.furnished === 1 || listing.furnished === "1"
+      ? "Yes"
+      : listing.furnished === 0 || listing.furnished === "0"
+      ? "No"
+      : "";
 
-  // Parking display
-  let parkingText = "";
-  if (listing.parking === 1 || listing.parking === "1") {
-    parkingText = "Yes";
-  } else if (listing.parking === 0 || listing.parking === "0") {
-    parkingText = "No";
-  }
+  const parkingText =
+    listing.parking === 1 || listing.parking === "1"
+      ? "Yes"
+      : listing.parking === 0 || listing.parking === "0"
+      ? "No"
+      : "";
+
+  let swiperHtml = `
+    <div class="swiper item-swiper">
+      <div class="swiper-wrapper item-swiper-wrapper" id="item-swiper-wrapper"></div>
+      <div class="swiper-pagination item-swiper-pagination"></div>
+      <div class="swiper-button-prev item-swiper-button-prev"></div>
+      <div class="swiper-button-next item-swiper-button-next"></div>
+    </div>
+  `;
 
   container.innerHTML = `
+    ${swiperHtml}
     <div class="item_detail">
-      ${
-        listing.image_url
-          ? `<img src="${listing.image_url}" alt="Property Image" />`
-          : ""
-      }
       ${renderField("Title", listing.title)}
       ${renderField("Location", listing.city)}
       ${renderField("Address", listing.address)}
@@ -74,12 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ${renderField("Rooms", listing.rooms)}
       ${renderField("Beds", listing.beds)}
       ${renderField("Bathrooms", listing.bathroom)}
-      ${renderField(
-        "Floor",
-        listing.floor !== null && listing.floor !== undefined
-          ? listing.floor
-          : ""
-      )}
+      ${renderField("Floor", listing.floor)}
       ${
         furnishedText
           ? `<p><strong>Furnished:</strong> ${furnishedText}</p>`
@@ -101,4 +95,36 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     </div>
   `;
+
+  // Fetch images and render Swiper
+  fetch(`../api/item_slider.php?property_id=${listing.property_id}`)
+    .then((res) => res.json())
+    .then((resData) => {
+      if (resData.status === "success") {
+        const wrapper = document.getElementById("item-swiper-wrapper");
+        wrapper.innerHTML = resData.data
+          .map(
+            (img) =>
+              `<div class="swiper-slide item-swiper-slide"><img src="${img.image_url}" alt="Property image" /></div>`
+          )
+          .join("");
+
+        new Swiper(".item-swiper", {
+          loop: true,
+          pagination: {
+            el: ".item-swiper-pagination",
+            clickable: true,
+          },
+          navigation: {
+            nextEl: ".item-swiper-button-next",
+            prevEl: ".item-swiper-button-prev",
+          },
+        });
+      } else {
+        console.error("Failed to load images:", resData.message);
+      }
+    })
+    .catch((err) => {
+      console.error("Error loading images:", err);
+    });
 });

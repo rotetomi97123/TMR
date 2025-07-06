@@ -1237,6 +1237,23 @@ body {
   border-radius: 8px;
   padding: 16px;
 }
+
+.item-swiper {
+  width: 100% !important;
+  max-width: 1000px !important;
+  height: 500px !important;
+  margin: 0 auto 20px auto;
+  border-radius: 16px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.item-swiper-slide img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
 .btn-delete {
   color: #dc3545;
   border: 1px solid #dc3545;
