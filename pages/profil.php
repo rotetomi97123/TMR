@@ -150,6 +150,8 @@ $listings = $stmtListings->fetchAll(PDO::FETCH_ASSOC);
 
 
 </div>
+    <?php include '../includes/footer.php'; ?>
+
 <script src="../js/profile.js"></script>
 <script src="../js/navbar.js"></script>
 <script>

@@ -2,7 +2,8 @@
 @use "_item.scss" as *;
 @use "_variables.scss" as *;
 @use "_result.scss" as *;
-@use "recentlist.scss" as *;
+@use "_recentlist.scss" as *;
+@use "_footer.scss" as *;
 
 * {
   margin: 0;
@@ -1042,6 +1043,7 @@ body {
   justify-content: center;
   align-items: center;
   gap: 16px;
+  min-height: 80vh;
 }
 .required {
   color: red !important;
@@ -1071,9 +1073,12 @@ body {
   align-items: center;
 }
 .nav-auth-logout-mobile,
-.nav-auth-profil-mobile {
+.nav-auth-profil-mobile,
+.nav-auth-login-mobile,
+.nav-auth-register-mobile {
   padding: 8px 16px !important;
 }
-.nav-auth-profil-mobile {
+.nav-auth-profil-mobile,
+.nav-auth-register-mobile {
   color: white !important;
 }
